@@ -1,0 +1,29 @@
+{% extends 'list.html' %} {% block head %}
+<tr>
+  <th scope="col">Nr°</th>
+  <th scope="col">Nombre</th>
+  <th scope="col">Categoria</th>
+  <th scope="col">Imagen</th>
+  <th scope="col">Precio de Venta</th>
+  <th scope="col">Opciones</th>
+</tr>
+
+{% endblock head %} {% block columns %} {% for c in object_list %}
+<tr>
+  <td scope="row">{{ c.id }}</td>
+  <td>{{ c.name}}</td>
+  <td>{{ c.cate }}</td>
+  <td><img src="/media/{{ c.image }}" alt="Image" class="img img-fluid " style="width: 40px; height: auto;"></td>
+  <td>{{ c.pvp }}</td>
+
+  <td>
+    <button class="btn btn-primary btn-xs">
+      <i class="fa-solid fa-pen-to-square"></i>
+    </button>
+    <button class="btn btn-danger btn-xs">
+      <i class="fa-solid fa-trash-can"></i>
+    </button>
+  </td>
+</tr>
+
+{% endfor %} {% endblock columns %} 

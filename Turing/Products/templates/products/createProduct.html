@@ -1,0 +1,59 @@
+{% extends 'base.html' %} {% block content %}
+<main class="container mt-5 mb-5">
+    <a href="/list/product" class="btn btn-outline-info">List Products</a>
+  <div class="card mt-3">
+    <div class="card-header">{{ title }}</div>
+    
+      {% if form.errors %}
+      <div class="alert alert-danger alert-dismissible text-danger text-center"></div>
+      <ul style="list-style: none;">
+        <h5><i class="icon fas fa-ban" ></i> ha ocurrido un error al guardar los datos</h5>
+        <li ><strong class="text-danger">{{ form.errors }}</strong></li>
+      </ul>
+    </div>
+      {% endif %}
+    
+    <div class="card-body text-center d-flex justify-content-center">
+      <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %} 
+        <input type="hidden" name="action" value="{{ action }}">
+        {% for field in form %}
+        
+        <div class="form-group">
+          <label for="name">{{ field.label }}</label>
+          {{ field }}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-outline-success">
+            <i class="fa-solid fa-floppy-disk"></i>  Save
+        </button>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock content %}
+{% block scripting %}
+ <script>
+    $('form').on('submit',function (e) {
+        e.preventDefault()
+       var parameters =  new FormData(this) /* este metodo funciona para solo texto $(this).serializeArray();*/
+       
+       $.ajax({
+        url: "{% url 'create_product' %}",
+        type: 'POST',
+        data: parameters,
+        dataType : 'json',
+        processData: false,
+        contentType:false
+       }).done(function(date){
+        console.log(date)
+        window.location.href = "{% url 'list_Product' %}";
+       }).fail(function(jqXHR, textStatus, errorThrown){
+        alert(textStatus + errorThrown)
+       }).always(function(date){
+        console.log('always')
+       })
+    })
+</script> 
+      {% endblock scripting %}
+

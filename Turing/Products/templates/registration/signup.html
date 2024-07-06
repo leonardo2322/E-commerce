@@ -1,0 +1,33 @@
+{% extends 'base.html' %} {% block content %}
+
+{% if form.errors %}
+<div class="mt-5 mb-5 bg-danger" >
+    <h1 class="fw-bold">A ocurrido un error verifica la contraseña y vuelve a intentarlo</h1>
+   
+</div>
+{% endif %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <form class="form" action="{% url 'signup' %}" method="post" >
+                {% csrf_token %}
+                <div class="title">Welcome,<br><span>sign up to continue</span></div>
+                <label for="username" class="text-light">Nombre del Usuario:</label>
+                <input type="text" placeholder="nombre de usuario" name="username" id="username" class="input">
+                <label for="password1" class="text-light">password</label>
+                <input type="password" placeholder="Password1" name="password1" id="password1" class="input">
+                <label for="password2" class="text-light">Verificar</label>
+                <input type="password" placeholder="verificacion de la contraseña" name="password2" id="password2" class="input">
+                <div class="login-with">
+                  <div class="button-log">🐱</div>
+                 
+                </div>
+                <button class="button-confirm" type="submit">Start Now →</button>
+              </form>
+              
+           
+            
+        </div>
+    </div>
+</div>
+{% endblock content %}

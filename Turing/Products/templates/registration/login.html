@@ -1,0 +1,27 @@
+{% extends 'base.html' %} {% block content %}
+
+ <div class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <form class="form" action="{% url 'login' %}" method="post" >
+                    {% csrf_token %}
+                    <div class="title">Welcome,<br><span>login to continue</span></div>
+                    <label for="username" class="text-light">Nombre del Usuario:</label>
+                    <input type="text" placeholder="nombre de usuario" name="username" id="username" class="input">
+                    <label for="password" class="text-light">password</label>
+                    <input type="password" placeholder="Password" name="password" id="password" class="input">
+                    <a href="{% url 'signup' %}"  class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Registrarse</a>
+                    <div class="login-with">
+                      <div class="button-log">🐱</div>
+                      
+                    </div>
+                    <button class="button-confirm" type="submit">Login →</button>
+                  </form>
+                  
+               
+                
+            </div>
+        </div>
+    </div>
+    
+{% endblock content %}
