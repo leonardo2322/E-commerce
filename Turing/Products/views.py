@@ -14,12 +14,13 @@ from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.db import IntegrityError
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 def vistaHome(request):
     return render(request, 'home.html')
 def signout(request):
     logout(request)
     return redirect('login')
+
 class SignUpView(CreateView):
     model = User
     template_name = 'registration/signup.html'
@@ -30,7 +31,6 @@ class SignUpView(CreateView):
         try:
             # Guardar el usuario
             user = form.cleaned_data['username']
-            print(form.cleaned_data)
             if User.objects.filter(username=user).exists():
                 return render(self.request, 'registration/signup.html', {'error_message': 'Error al crear el usuario.'})
             else:
@@ -68,6 +68,7 @@ class CategoryListView(ListView):
         context['title'] = 'listado_de_tareas'
         context['urls'] = reverse_lazy("create_category")
         return context
+    
 class CreatItemCategory(CreateView):
     model = Category
     form_class = FormCreateCategory
@@ -107,11 +108,12 @@ class CreateItemProduct(CreateView):
         context['action'] = 'add'
         return context
     
-class ListViewProduct(ListView):
+class ListViewProduct(LoginRequiredMixin,ListView):
     model = Product
     template_name = 'products/listProduct.html'
+    context_object_name = 'products'
     success_url = reverse_lazy("list_Product")
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'listado de Productos'

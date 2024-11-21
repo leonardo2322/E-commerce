@@ -18,12 +18,18 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
-
+from accounts.views import Profile_user_view,Profile_Image_Update_View,Profile_Image_Delete_View ,Profile_update_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Products.urls')),
-    path('accounts',include("django.contrib.auth.urls"))
+    path('accounts/',include("django.contrib.auth.urls")),
+    path('accounts/profile/', Profile_user_view.as_view(), name="profile_user"),
+    path('upload_image/', Profile_Image_Update_View.as_view(), name='upload_image'),
+    path('eliminar-imagen/', Profile_Image_Delete_View.as_view(), name='delete_profile_image'),
+    path('actualizar_perfil/',Profile_update_view.as_view(),name='update_profile')
+
 ]
+
 
 urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)

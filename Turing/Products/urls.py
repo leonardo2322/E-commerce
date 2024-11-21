@@ -9,7 +9,6 @@ urlpatterns = [
     path('list/product', ListViewProduct.as_view(), name='list_Product'),
     path('login/', login_View.as_view(), name='login'),
     path('signup/', SignUpView.as_view(), name="signup" ),
-    path('accounts/profile/',vistaHome,name="profile"),
-    path('accountslogout/', signout, name="logout"),
+    path('accounts/logout/', signout, name="logout"),
     path('products/', ViewProducts.as_view(), name='products')
 ]

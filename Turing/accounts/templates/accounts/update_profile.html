@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+{% block content %}
+
+<section>
+  <div>
+    <form method="post" enctype="multipart/form-data">
+        <h1>Actualizacion perfil de: {{ user_name }} </h1>
+      {% csrf_token %} 
+      <label for="{{ form.image.id_for_label }}" class="form-label">Imagen de perfil</label>
+      {{ form.image|add_class:"form-control m-4" }}  
+
+      <label for="{{ form.location.id_for_label }}" class="form-label">Ubicación:</label>
+      {{ form.location|add_class:"form-control m-4 " }}
+       <style>
+        input[name="user"] {
+          display: none; /* Esto oculta el campo 'user' en el formulario */
+        }
+      </style>
+      {% if form.errors %}
+      <div class="errors">
+        {% for field in form %} {% for error in field.errors %}
+        <p>{{ error }}</p>
+        {% endfor %} {% endfor %}
+      </div>
+      {% endif %}
+
+      <button type="submit" class="btn btn-success">guardar cambios</button>
+    </form>
+  </div>
+</section>
+{% endblock content %}
