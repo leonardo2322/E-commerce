@@ -1,6 +1,37 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% load static %} {% block content %}
+<!-- Contenedor principal -->
+<div
+  class="d-flex justify-content-center align-items-center vh-100 text-center"
+>
+  <div class="container">
+    <!-- Título -->
+    <h1 class="display-4 text-primary mb-4">
+      ¡Bienvenido a Nuestra Panadería!
+    </h1>
+    <img
+      src="{% static 'img/Palerossi.jpg' %}"
+      alt="logo"
+      class="img-fluid rounded-circle shadow"
+    />
 
-{% block content %}
-<h5 class="tex-danger">Nuestros trabajos</h5>
+    <!-- Descripción -->
+    <p class="lead text-secondary mb-4">
+      Aquí encontrarás los mejores panes, pasteles y productos frescos para
+      todos tus gustos. En esta aplicación, puedes adquirir tus favoritos desde
+      la comodidad de tu hogar.
+    </p>
 
-{% endblock  %}
+    <!-- Llamado a la acción -->
+    <p class="fs-5 text-dark mb-4">
+      ¿Qué esperas? Ve y regístrate para comenzar a disfrutar de nuestros
+      deliciosos productos.
+    </p>
+
+    <!-- Botón de registro -->
+    <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">
+      ¡Regístrate Ahora!
+    </a>
+  </div>
+</div>
+
+{% endblock %}

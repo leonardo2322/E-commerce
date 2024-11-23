@@ -5,9 +5,12 @@ from .models import Profile
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
+    print("dentra en el signals ----------",instance)
     if created:
+        print(f"Creating profile for user: {instance.username}")
         Profile.objects.create(user=instance)
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()  # Guarda el perfil cuando el usuario se guarda
+    print(f"Saving profile for user: {instance.username}")
+    instance.profile.save()

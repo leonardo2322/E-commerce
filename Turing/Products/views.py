@@ -15,6 +15,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.db import IntegrityError
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from django.shortcuts import get_object_or_404
 def vistaHome(request):
     return render(request, 'home.html')
 def signout(request):
@@ -32,22 +34,35 @@ class SignUpView(CreateView):
             # Guardar el usuario
             user = form.cleaned_data['username']
             if User.objects.filter(username=user).exists():
-                return render(self.request, 'registration/signup.html', {'error_message': 'Error al crear el usuario.'})
-            else:
-                if form.cleaned_data['password1'] == form.cleaned_data['password2']:
+                return render(self.request, self.template_name, {
+                    'form': form,
+                    'error_message': 'El nombre de usuario ya está en uso.',
+                    'status': 'error'
+                })
+            if form.cleaned_data['password1'] != form.cleaned_data['password2']:
+                return render(self.request, self.template_name, {
+                    'form': form,
+                    'error_message': 'Las contraseñas no coinciden.',
+                    'status': 'error'
+                })
                     
-                    user = form.save(commit=False)
-                    user.set_password(form.cleaned_data['password1'])
-                    user.save()
-                    return redirect(self.success_url)
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password1'])
+            user.save()
+            return redirect(self.success_url)
         except IntegrityError:
-            return render(self.request, 'registration/signup.html', {'error_message': 'Error al crear el usuario.'})
+             return render(self.request, self.template_name, {
+                'form': form,
+                'error_message': 'Error al crear el usuario. Puede que ya exista.',
+                'status': 'error'
+            })
 
     def form_invalid(self, form):
-        # Si el formulario es inválido, renderizar el formulario nuevamente con los errores
-       
-        return render(self.request, self.template_name, {'form': form})
-
+        return render(self.request, self.template_name, {
+            'form': form,
+            'error_message': 'Por favor corrige los errores en el formulario.',
+            'status': 'error'
+        })
 
 class login_View(LoginView):
     template_name = "registration/login.html"

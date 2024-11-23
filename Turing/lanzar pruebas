@@ -1,0 +1,6 @@
+from django.contrib.auth.models import User
+from accounts.models import Profile
+
+for user in User.objects.all():
+    if not hasattr(user, 'profile'):  # Usando el related_name definido
+        Profile.objects.create(user=user)
