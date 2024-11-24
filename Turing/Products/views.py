@@ -9,16 +9,21 @@ from .forms import FormCreateCategory, FormCreateProduct
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.views import LoginView
-from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
+from django.contrib.auth.forms import UserCreationForm
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.db import IntegrityError
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from django.shortcuts import get_object_or_404
 def vistaHome(request):
     return render(request, 'home.html')
+
+def error_404_view(request, exception):
+    return render(request, '404.html', status=404)
+def error_500_view(request, exception):
+    return render(request, '500.html', status=500)
+
 def signout(request):
     logout(request)
     return redirect('login')

@@ -2,51 +2,21 @@
 
 <section class="d-flex justify-content-center align-items-center min-vh-100">
   <div>
-    <h1>Perfil</h1>
-    <div>
-      {% if profile.image and profile.image != 'users/image_empty.png' %}
-      <!-- Mostrar imagen de perfil -->
-      <img
-        src="{{ profile.image.url }}"
-        alt="{{ profile.user.username }}"
-        class="img-fluid rounded-circle mb-5 mt-5"
-        style="max-width: 150px; max-height: 150px"
-      />
-      {% else %}
-      <!-- Mostrar imagen predeterminada cuando no hay imagen -->
-      <img
-        src="{% static 'img/blank-profile.webp' %}"
-        alt=""
-        class="img-fluid rounded-circle mb-5 mt-5"
-        style="max-width: 150px; max-height: 150px"
-      />
-      <form
-        method="post"
-        enctype="multipart/form-data"
-        action="{% url 'upload_image' %}"
-      >
-        {% csrf_token %}
-        <input type="file" name="image" accept="image/*" class="m-2" />
-
-        <button type="submit" class="m-5">Subir Imagen</button>
-      </form>
-      {% endif %}
-    </div>
-
-    <!-- Formulario para subir imagen, visible solo si no hay imagen -->
-
-    <!-- Información del perfil -->
-
-    <ul class="list-unstyled text-center">
-      <li>
-        <strong>Usuario:</strong>
-        {{ profile.user.username }}
-      </li>
-      <li>
-        <strong>Ubicación:</strong>
-        {{ profile.location|default:"No especificada" }}
-      </li>
-      <li>
+    {% if profile.image and profile.image != 'users/image_empty.png' %}
+    <div class="card text-center bg-dark text-light border-light " style="width: 450px;">
+      <h5 class="card-header">Perfil</h5>
+      <div class="card-body">
+        <img
+          src="{{ profile.image.url }}"
+          alt="{{ profile.user.username }}"
+          class="img-fluid rounded-circle mb-5 mt-5"
+          style="max-width: 150px; max-height: 150px"
+        />
+        <h5 class="card-title">{{ profile.user.username }}</h5>
+        <p class="card-text">
+          <strong>Ubicación:</strong>
+          {{ profile.location|default:"No especificada" }}
+        </p>
         <form
           method="post"
           action="{% url 'delete_profile_image' %}"
@@ -55,32 +25,93 @@
           {% csrf_token %}
           <button type="submit" class="btn btn-danger">eliminar imagen</button>
         </form>
-      </li>
-      <li>
-        <form method="post" action="{% url 'update_profile' %}">
+      </div>
+      <div class="card-footer text-body-secondary">
+           <form method="post" action="{% url 'update_profile' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">
+              Editar
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-pencil-square"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                />
+                <path
+                  fill-rule="evenodd"
+                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
+                />
+              </svg>
+            </button>
+          </form>
+      </div>
+    </div>
+    <!-- Mostrar imagen de perfil -->
+
+    {% else %}
+    <!-- Mostrar imagen predeterminada cuando no hay imagen -->
+    <div class="card text-center bg-dark text-light border-light" style="width: 450px;">
+      <h5 class="card-header">Perfil</h5>
+      <div class="card-body">
+        <img
+          src="{% static 'img/blank-profile.webp' %}"
+          alt=""
+          class="img-fluid rounded-circle mb-5 mt-5"
+          style="max-width: 150px; max-height: 150px"
+        />
+        <h5 class="card-title">{{ profile.user.username }}</h5>
+        <p class="card-text">
+          <strong>Ubicación:</strong>
+          {{ profile.location|default:"No especificada" }}
+        </p>
+        <form
+          method="post"
+          enctype="multipart/form-data"
+          action="{% url 'upload_image' %}"
+        >
           {% csrf_token %}
-          <button type="submit" class="btn btn-primary">
-            Editar
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-pencil-square"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-              />
-              <path
-                fill-rule="evenodd"
-                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-              />
-            </svg>
-          </button>
+          <input type="file" name="image" accept="image/*" class="m-2" />
+
+          <button type="submit" class="m-5">Subir Imagen</button>
         </form>
-      </li>
-    </ul>
+       
+      </div>
+      <div class="card-footer text-body-secondary">
+           <form method="post" action="{% url 'update_profile' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">
+              Editar
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-pencil-square"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                />
+                <path
+                  fill-rule="evenodd"
+                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
+                />
+              </svg>
+            </button>
+          </form>
+      </div>
+    </div>
+
+    {% endif %}
+
+    <!-- Formulario para subir imagen, visible solo si no hay imagen -->
+
+    <!-- Información del perfil -->
   </div>
 </section>
 

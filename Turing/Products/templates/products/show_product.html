@@ -1,0 +1,31 @@
+{% extends "base.html" %} 
+
+{% block content %}
+
+<section>
+    <div class="card text-center bg-dark text-light border-light " style="width: 450px;">
+      <h5 class="card-header">Perfil</h5>
+      <div class="card-body">
+        <img
+          src="{{ profile.image.url }}"
+          alt="{{ profile.user.username }}"
+          class="img-fluid rounded-circle mb-5 mt-5"
+          style="max-width: 150px; max-height: 150px"
+        />
+        <h5 class="card-title">{{ profile.user.username }}</h5>
+        <p class="card-text">
+          <strong>Ubicación:</strong>
+          {{ profile.location|default:"No especificada" }}
+        </p>
+        <form
+          method="post"
+          action="{% url 'delete_profile_image' %}"
+          class="p-5"
+        >
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">eliminar imagen</button>
+        </form>
+      </div>
+</section>
+
+{% endblock content %}

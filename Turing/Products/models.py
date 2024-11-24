@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from django.db import models
 
-
+from accounts.models import Profile
 
 # Create your models here.
 gender_choices = (
@@ -38,32 +38,18 @@ class Product(models.Model):
         verbose_name_plural = 'Productos'
         ordering = ['id']
 
-class Client(models.Model):
-    names = models.CharField(max_length=150, verbose_name='Nombres')
-    last_names = models.CharField(max_length=150, verbose_name='Apellidos')
-    dni = models.CharField(max_length=10, unique=True, verbose_name='Dni')
-    birthday = models.DateField(default=timezone.now, verbose_name='Fecha de nacimiento')
-    address = models.CharField(max_length=150, null=True, blank=True, verbose_name='Dirección')
-    sexo = models.CharField(max_length=10, choices=gender_choices, default='male', verbose_name='Sexo')
-    inserted = models.DateTimeField(default=timezone.now)
-    updated = models.DateTimeField(auto_now=True)
-    def __str__(self):
-        return self.names
 
-    class Meta:
-        verbose_name = 'Cliente'
-        verbose_name_plural = 'Clientes'
-        ordering = ['id']
 
 class Sale(models.Model):
-    cli = models.ForeignKey(Client, on_delete=models.CASCADE)
+    cli = models.ForeignKey(Profile, on_delete=models.CASCADE)
     date_joined = models.DateField(default=timezone.now)
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     inserted = models.DateTimeField(default=timezone.now)
+
     def __str__(self):
-        return self.cli.names
+        return f"{self.cli.user}"
 
     class Meta:
         verbose_name = 'Venta'

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<section class="container">
+    <div class="row">
+        <img src="{% static "img/img-not-found.png" %}" alt="">
+        <h1 class="display-4 text-danger mb-4">Error 500</h1>
+        <p class="text-danger">Algo salió mal. Intenta nuevamente más tarde.</p>
+        <a href="{% url "home" %}" class="btn btn-primary ">Volver al inicio</a>
+    </div>
+</section>
+
+{% endblock content %}

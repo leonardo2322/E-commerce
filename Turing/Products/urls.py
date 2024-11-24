@@ -1,6 +1,9 @@
 from django.urls import path
 from .views import *
+from django.conf.urls import handler404, handler500
 
+handler404 = 'Products.views.error_404_view'
+handler500 = 'Products.views.error_500_view'
 urlpatterns = [
     path('', vistaHome ,name='home'),
     path("list/categories", CategoryListView.as_view(), name='category_list'),

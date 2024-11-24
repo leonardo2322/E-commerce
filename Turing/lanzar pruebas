@@ -1,6 +1,18 @@
-from django.contrib.auth.models import User
-from accounts.models import Profile
+<script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
 
-for user in User.objects.all():
-    if not hasattr(user, 'profile'):  # Usando el related_name definido
-        Profile.objects.create(user=user)
+        // Almacenar el estado en localStorage para persistencia
+        const currentTheme = localStorage.getItem('theme') || 'light-mode';
+        body.className = currentTheme;
+        themeToggle.textContent = currentTheme === 'dark-mode' ? 'Modo Claro' : 'Modo Oscuro';
+
+        themeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.toggle('dark-mode');
+            body.classList.toggle('light-mode', !isDarkMode);
+
+            // Guardar el estado del tema en localStorage
+            localStorage.setItem('theme', isDarkMode ? 'dark-mode' : 'light-mode');
+            themeToggle.textContent = isDarkMode ? 'Modo Claro' : 'Modo Oscuro';
+        });
+    </script>
