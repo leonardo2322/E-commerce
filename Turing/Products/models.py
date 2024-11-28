@@ -29,6 +29,7 @@ class Product(models.Model):
     cate = models.ForeignKey(Category, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='product/%Y/%m/%d', null=True, blank=True)
     pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    description = models.TextField(max_length=350,blank=True, null= True)
     inserted = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return self.name
@@ -40,7 +41,7 @@ class Product(models.Model):
 
 
 
-class Sale(models.Model):
+class Cart(models.Model):
     cli = models.ForeignKey(Profile, on_delete=models.CASCADE)
     date_joined = models.DateField(default=timezone.now)
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
@@ -56,8 +57,8 @@ class Sale(models.Model):
         verbose_name_plural = 'Ventas'
         ordering = ['id']
 
-class DetSale(models.Model):
-    sale = models.ForeignKey(Sale, on_delete=models.CASCADE)
+class Cart_Item(models.Model):
+    sale = models.ForeignKey(Cart, on_delete=models.CASCADE)
     prod = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     cant = models.IntegerField(default=0)

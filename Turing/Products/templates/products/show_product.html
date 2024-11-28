@@ -1,31 +1,125 @@
-{% extends "base.html" %} 
+{% extends "base.html" %} {% block content %}
 
-{% block content %}
+<section class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8 col-sm-10">
+      <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white text-center">
+          <h4>{{ product.name }}</h4>
+        </div>
+        <div class="card-body text-center">
+          <!-- Imagen del producto -->
+          <img
+            src="{{ product.image.url }}"
+            alt="{{ product.name }}"
+            class="img-fluid rounded mb-4"
+            style="max-width: 300px; max-height: 300px"
+          />
+          <!-- Detalles del producto -->
+          <p class="text-muted mb-2">
+            <strong>Categoría:</strong>
+            {{ product.cate }}
+          </p>
+          <div class="text-center">
+            <label for="quantity" class="form-label">Cantidad</label>
 
-<section>
-    <div class="card text-center bg-dark text-light border-light " style="width: 450px;">
-      <h5 class="card-header">Perfil</h5>
-      <div class="card-body">
-        <img
-          src="{{ profile.image.url }}"
-          alt="{{ profile.user.username }}"
-          class="img-fluid rounded-circle mb-5 mt-5"
-          style="max-width: 150px; max-height: 150px"
-        />
-        <h5 class="card-title">{{ profile.user.username }}</h5>
-        <p class="card-text">
-          <strong>Ubicación:</strong>
-          {{ profile.location|default:"No especificada" }}
-        </p>
-        <form
-          method="post"
-          action="{% url 'delete_profile_image' %}"
-          class="p-5"
+            <div class="input-group" style="max-width: 150px; margin: 0 auto">
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                onclick="decreaseQuantity()"
+              >
+                −
+              </button>
+              <input
+                type="number"
+                min="1"
+                id="quantity"
+                class="form-control text-center"
+                placeholder="0"
+                value="{{ quantity }}"
+                aria-label="Cantidad"
+              />
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                onclick="increaseQuantity()"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          <p class="text-muted mb-4">
+            <strong>Descripción:</strong>
+            {{ product.description|default:"Sin Descripcion" }}
+          </p>
+          <!-- Precio destacado -->
+          <div class="bg-light py-2 px-4 rounded">
+            <h3 id="price" class="text-success font-weight-bold mb-0">
+              <strong>Precio:</strong>
+              ${{ product.pvp|floatformat:2 }}
+            </h3>
+            <h4 class="text-warning">
+              <strong>Precio total:</strong>
+              <span id="total_price"></span>
+            </h4>
+          </div>
+        </div>
+        <!-- Botón de acción -->
+        <div
+          class="card-footer d-flex justify-content-between bg-light text-center"
         >
-          {% csrf_token %}
-          <button type="submit" class="btn btn-danger">eliminar imagen</button>
-        </form>
+          <a href="{% url 'products' %}" class="btn btn-secondary">
+            Volver a la lista de productos
+          </a>
+          <button class="btn btn-success">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-cart-plus"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9z"
+              />
+              <path
+                d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
+    </div>
+  </div>
 </section>
 
-{% endblock content %}
+{% endblock content %} {% block scripting %}
+<script>
+  function decreaseQuantity() {
+    const total_price = document.getElementById("total_price");
+    const price = document.getElementById("price").innerText.replace(",", ".");
+
+    const quantityInput = document.getElementById("quantity");
+    let currentValue = parseInt(quantityInput.value) || 1;
+    if (currentValue > 1) {
+      quantityInput.value = currentValue - 1;
+      total_price.innerText =
+        quantityInput.value * parseFloat(price.replace(/[^0-9.-]+/g, ""));
+    }
+  }
+
+  function increaseQuantity() {
+    const total_price = document.getElementById("total_price");
+    const price = document.getElementById("price").innerText.replace(",", ".");
+    const quantityInput = document.getElementById("quantity");
+    console.log(price);
+    let currentValue = parseInt(quantityInput.value) || 1;
+    quantityInput.value = currentValue + 1;
+    total_price.innerText =
+      quantityInput.value * parseFloat(price.replace(/[^0-9.-]+/g, ""));
+  }
+</script>
+{% endblock scripting %}

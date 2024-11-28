@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import *
+from .views.views_principal import *
 from django.conf.urls import handler404, handler500
-
+from .views.views_sale import Show_product_view
 handler404 = 'Products.views.error_404_view'
 handler500 = 'Products.views.error_500_view'
 urlpatterns = [
@@ -13,5 +13,6 @@ urlpatterns = [
     path('login/', login_View.as_view(), name='login'),
     path('signup/', SignUpView.as_view(), name="signup" ),
     path('accounts/logout/', signout, name="logout"),
-    path('products/', ViewProducts.as_view(), name='products')
+    path('products/', ViewProducts.as_view(), name='products'),
+    path('product/<int:pk>/', Show_product_view.as_view(), name='show_product' )
 ]

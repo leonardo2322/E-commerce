@@ -1,11 +1,10 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from django.views.generic import ListView,CreateView
+from django.views.generic import ListView,CreateView ,DetailView
 from django.views import View
 # from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from .models import Category, Product
-from .forms import FormCreateCategory, FormCreateProduct
+
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.views import LoginView
@@ -15,6 +14,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.db import IntegrityError
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from ..models import Category, Product
+from ..forms import FormCreateCategory, FormCreateProduct
 
 def vistaHome(request):
     return render(request, 'home.html')
@@ -142,10 +144,10 @@ class ListViewProduct(LoginRequiredMixin,ListView):
     
 
 
-class ViewProducts(ListView):
+    
+    
+class ViewProducts(LoginRequiredMixin,ListView):
     model = Product
     template_name = 'products/CardsProducts.html'
     
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
+    
