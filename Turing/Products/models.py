@@ -28,9 +28,9 @@ class Product(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
     cate = models.ForeignKey(Category, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='product/%Y/%m/%d', null=True, blank=True)
-    pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=3)
     description = models.TextField(max_length=350,blank=True, null= True)
-    inserted = models.DateTimeField(default=timezone.now)
+    created = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return self.name
 
@@ -42,33 +42,31 @@ class Product(models.Model):
 
 
 class Cart(models.Model):
-    cli = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    date_joined = models.DateField(default=timezone.now)
-    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
-    iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
-    total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
-    inserted = models.DateTimeField(default=timezone.now)
+    client = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    total = models.DecimalField(default=0.00,max_digits=9, decimal_places=3)
+    created = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"{self.cli.user}"
+        return f"{self.client.user}"
 
     class Meta:
-        verbose_name = 'Venta'
-        verbose_name_plural = 'Ventas'
+        verbose_name = 'carrito'
         ordering = ['id']
 
 class Cart_Item(models.Model):
-    sale = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    prod = models.ForeignKey(Product, on_delete=models.CASCADE)
-    price = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
-    cant = models.IntegerField(default=0)
-    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
+    prods = models.ForeignKey(Product, on_delete=models.CASCADE)
+    cant = models.IntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def total_price(self):
+        return self.prods.pvp * self.cant
+    
+
     def __str__(self):
-        return self.prod.name
+        return self.prods.name
 
     class Meta:
-        verbose_name = 'Detalle de Venta'
-        verbose_name_plural = 'Detalle de Ventas'
+        verbose_name = 'Detalle de carrito'
         ordering = ['id']

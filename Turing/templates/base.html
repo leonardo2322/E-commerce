@@ -68,7 +68,7 @@
               {% endif %}
             </ul>
             {% if user.is_authenticated %}
-              <form class="d-flex"> 
+              <form class="d-flex" action="{% url "cart" %}" method="get"> 
                 <button class="btn btn-success w-10" type="submit"><i class="fa-solid fa-cart-shopping"></i> Shop</button>
               </form>
             {% endif %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Tu carrito</h2>
+<ul>
+    {% for item in cart_items %}
+    <li>
+        <strong>{{ item.name }}</strong><br>
+        Precio: {{ item.price }}<br>
+        Cantidad: {{ item.cant }}<br>
+        Subtotal: {{ item.price|floatformat:2|add:item.cant|floatformat:2 }}
+    </li>
+    {% empty %}
+    <p>Tu carrito está vacío.</p>
+    {% endfor %}
+</ul>
+{% endblock content %}

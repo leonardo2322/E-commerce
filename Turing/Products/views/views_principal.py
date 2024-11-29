@@ -1,7 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import ListView,CreateView ,DetailView
-from django.views import View
 # from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 
@@ -15,7 +14,8 @@ from django.contrib.auth import logout
 from django.db import IntegrityError
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from ..models import Category, Product
+from ..models import Category, Product ,Profile
+from Products.utils.cart_utils import Cart_manage
 from ..forms import FormCreateCategory, FormCreateProduct
 
 def vistaHome(request):
@@ -73,6 +73,23 @@ class SignUpView(CreateView):
 
 class login_View(LoginView):
     template_name = "registration/login.html"
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        user = self.request.user
+        user2 = self.request.user
+        print(user,user2,"-----------------en user")
+        if not hasattr(user, 'profile'):
+            Profile.objects.create(user=user)
+
+        cart = Cart_manage(self.request)
+        cart.sync_with_db(user)
+
+        return response
+    
+    def get_success_url(self):
+        return reverse_lazy('profile_user')
     
 
 class CategoryListView(ListView):

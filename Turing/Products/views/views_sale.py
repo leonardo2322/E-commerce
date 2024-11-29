@@ -1,8 +1,13 @@
-from ..models import  Product
 from typing import Any
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import DetailView
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.views.generic import DetailView, View
 from django.shortcuts import get_object_or_404
+from django.views.generic import ListView
+
+from ..models import  Product,Profile
+from Products.utils.cart_utils import Cart_manage
 
 class Show_product_view(LoginRequiredMixin,DetailView):
     model = Product
@@ -14,3 +19,38 @@ class Show_product_view(LoginRequiredMixin,DetailView):
         context["quantity"] = 1 
         return context
     
+
+class Model_List_View(ListView):
+    template_name = 'Cart_temp/cart_temp.html'
+    context_object_name = 'cart_items'
+
+
+    def get_queryset(self):
+        cart = Cart_manage(self.request)
+
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            profile = Profile.objects.get(user=user)
+            cart.load_from_db(profile)
+
+        return cart.cart.values()
+    
+
+
+
+class Add_cart_view(View):
+    
+
+    def post(self, request, *args, **kwargs):
+        product_id = self.request.POST.get('product_id')
+        product = get_object_or_404(Product, id=product_id)
+
+        cart = Cart_manage(request)
+        cart.add(product)
+
+        response_data = {
+            'mensaje': f"Producto '{product.name}' agregado al carrito.",
+            'cart': request.session.get('cart', {}),
+        }
+        url = reverse('show_product', kwargs={'pk': product.pk})
+        return HttpResponseRedirect(url)

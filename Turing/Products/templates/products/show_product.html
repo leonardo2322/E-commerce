@@ -73,7 +73,10 @@
           <a href="{% url 'products' %}" class="btn btn-secondary">
             Volver a la lista de productos
           </a>
-          <button class="btn btn-success">
+          <form action="{% url "add_cart" %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <button class="btn btn-success" type="submit"> 
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -90,6 +93,7 @@
               />
             </svg>
           </button>
+          </form>
         </div>
       </div>
     </div>
@@ -98,6 +102,22 @@
 
 {% endblock content %} {% block scripting %}
 <script>
+  document.addEventListener('DOMContentLoaded',()=>{
+    const currentURL = window.location.pathname;
+    const productURLPattern = /^\/product\/\d+\/$/;
+   if (productURLPattern.test(currentURL)){
+    let total_price = document.getElementById("total_price");
+    
+    if (total_price.innerText.length == 0){
+      console.log(true)
+        let quantityInput = document.getElementById("quantity");
+        let price = document.getElementById("price").innerText.replace(",", ".");
+        total_price.innerText =
+                            quantityInput.value * parseFloat(price.replace(/[^0-9.-]+/g, ""));
+    }
+   }
+
+  })
   function decreaseQuantity() {
     const total_price = document.getElementById("total_price");
     const price = document.getElementById("price").innerText.replace(",", ".");
