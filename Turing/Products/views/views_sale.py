@@ -23,17 +23,25 @@ class Show_product_view(LoginRequiredMixin,DetailView):
 class Model_List_View(ListView):
     template_name = 'Cart_temp/cart_temp.html'
     context_object_name = 'cart_items'
-
+    total = 0
 
     def get_queryset(self):
         cart = Cart_manage(self.request)
-
+        cart.cart_total_price()
         if self.request.user.is_authenticated:
             user = self.request.user
             profile = Profile.objects.get(user=user)
             cart.load_from_db(profile)
 
         return cart.cart.values()
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+
+        cart = Cart_manage(self.request)
+        total = cart.cart_total_price()
+        print(total)
+        context["total_cart"] = total
+        return context
     
 
 

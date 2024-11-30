@@ -9,6 +9,11 @@ class Cart_manage:
             cart = self.session['cart'] = {}
         self.cart = cart
 
+    def cart_total_price(self):
+        total = 0
+        for key, value in self.cart.items():
+            total += float(value['cant']) * float(value['price'])
+        return total
 
     def add(self, product,cant=None):
 
