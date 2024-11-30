@@ -1,53 +1,38 @@
 {% extends 'base.html' %} {% block content %}
-<main class="container mb-5" >
-    <div class="card card-default mt-5 ">
-        <div class="card-header">
-            <div class="card-title">
-                {{ title }}
-            </div>
-        </div>
-        <div class="card-body">
-            <table class="table table-striped " id="list-categorys">
-                <thead>
-                    {% block head %}
-                    
-                    
-                    {% endblock head %}
-              
-                </thead>
-                <tbody>
-                    {% block columns %}
-    
-                    
-                    {% endblock columns %}
-                 
-                </tbody>
-              </table>
-              <div class="card-footer">
-                
-                <a class="btn btn-primary btn-flat" href="{{ urls }}"><i class="fa-solid fa-plus"></i>
-                    Nuevo registro
-                </a>
-              </div>
-        </div>
+<main class="container mb-5">
+  <div class="card card-default mt-5">
+    <div class="card-header">
+      <div class="card-title">{{ title }}</div>
     </div>
+    <div class="card-body">
+      <table class="table table-striped" id="list-categorys">
+        <thead>{% block head %} {% endblock head %}</thead>
+        <tbody>{% block columns %} {% endblock columns %}</tbody>
+      </table>
+      <div class="card-footer">
+        {% block buttonmoreitems %}
+        <a class="btn btn-primary btn-flat" href="{{ urls }}">
+          <i class="fa-solid fa-plus"></i>
+          Nuevo registro
+        </a>
+        {% endblock buttonmoreitems %}
+      </div>
+    </div>
+  </div>
 </main>
 
-{% endblock %}
-{% block scripting %}
+{% endblock %} {% block scripting %}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        let table = new DataTable('#list-categorys');
-       
-    });
-    
-    $('#boton').bind('click', function() {
-        if(!$('#navbarNav').hasClass('show')){
-            $('#navbarNav').addClass('show')
-        }
-        else{
-            $('#navbarNav').removeClass('show')
-        }
-      });
+  document.addEventListener("DOMContentLoaded", function () {
+    let table = new DataTable("#list-categorys");
+  });
+
+  $("#boton").bind("click", function () {
+    if (!$("#navbarNav").hasClass("show")) {
+      $("#navbarNav").addClass("show");
+    } else {
+      $("#navbarNav").removeClass("show");
+    }
+  });
 </script>
 {% endblock scripting %}

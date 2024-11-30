@@ -73,9 +73,11 @@
           <a href="{% url 'products' %}" class="btn btn-secondary">
             Volver a la lista de productos
           </a>
-          <form action="{% url "add_cart" %}" method="post">
+          <form action="{% url "add_cart" %}" method="post" id="cart-form">
             {% csrf_token %}
             <input type="hidden" name="product_id" value="{{ product.id }}">
+            <input type="hidden" name="quantity" id="hidden-quantity" value="1">
+
             <button class="btn btn-success" type="submit"> 
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -141,5 +143,19 @@
     total_price.innerText =
       quantityInput.value * parseFloat(price.replace(/[^0-9.-]+/g, ""));
   }
+
+
+  const form = document.getElementById('cart-form');
+  const quantityInput = document.getElementById('quantity');
+  const hiddenQuantity = document.getElementById('hidden-quantity')
+  form.addEventListener('submit', function (event){
+    const quantity = parseInt(quantityInput.value, 10);
+    if (quantity > 1) {
+            // Actualizar el campo oculto con el valor de cantidad
+            hiddenQuantity.value = quantity;
+            console.log(hiddenQuantity.value)
+        }
+        // Permitir el envío del formulario
+  })
 </script>
 {% endblock scripting %}

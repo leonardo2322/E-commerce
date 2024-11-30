@@ -1,18 +1,43 @@
-{% extends "base.html" %}
+{% extends "list.html" %}
 
-{% block content %}
 
 <h2>Tu carrito</h2>
-<ul>
-    {% for item in cart_items %}
-    <li>
-        <strong>{{ item.name }}</strong><br>
-        Precio: {{ item.price }}<br>
-        Cantidad: {{ item.cant }}<br>
-        Subtotal: {{ item.price|floatformat:2|add:item.cant|floatformat:2 }}
-    </li>
-    {% empty %}
-    <p>Tu carrito está vacío.</p>
-    {% endfor %}
-</ul>
-{% endblock content %}
+{% block head %}
+<tr>
+  <th scope="col">Nr°</th>
+  <th scope="col">Imagen</th>
+
+  <th scope="col">Nombre</th>
+  <th scope="col">precio</th>
+  <th scope="col">cantidad</th>
+  <th scope="col">opciones</th>
+
+</tr>
+
+{% endblock head %} {% block columns %} {% for item in cart_items %}
+<tr>
+  <td scope="row">{{ item.id }}</td>
+  <td scope="row"><img
+      src="{{ item.image }}"
+      alt="Image"
+      class="img img-fluid"
+      style="width: 40px; height: auto"
+    /></td>
+
+  <td>{{ item.name }}</td>
+  <td>{{ item.price }}</td>
+  <td>{{ item.cant }}</td>
+  <td>
+    <button class="btn btn-primary btn-xs">
+      <i class="fa-solid fa-pen-to-square"></i>
+    </button>
+    <button class="btn btn-danger btn-xs">
+      <i class="fa-solid fa-trash-can"></i>
+    </button>
+  </td>
+</tr>
+
+{% endfor %} {% endblock columns %} 
+{% block buttonmoreitems %}
+ {% endblock buttonmoreitems %}
+

@@ -43,14 +43,15 @@ class Add_cart_view(View):
 
     def post(self, request, *args, **kwargs):
         product_id = self.request.POST.get('product_id')
+        quantity = int(self.request.POST.get('quantity', 1))
         product = get_object_or_404(Product, id=product_id)
 
         cart = Cart_manage(request)
-        cart.add(product)
+        if quantity > 1:
+            cart.add(product,quantity)
+        else:
+            cart.add(product)
 
-        response_data = {
-            'mensaje': f"Producto '{product.name}' agregado al carrito.",
-            'cart': request.session.get('cart', {}),
-        }
+       
         url = reverse('show_product', kwargs={'pk': product.pk})
         return HttpResponseRedirect(url)

@@ -10,13 +10,13 @@ class Cart_manage:
         self.cart = cart
 
 
-    def add(self, product):
+    def add(self, product,cant=None):
 
         if str(product.id) not in self.cart.keys():
             self.cart[str(product.id)] = {
                 'id': int(product.id),
                 'name' : product.name,
-                'cant': 1,
+                'cant': cant if cant  is not None else 1,
                 'price':float(product.pvp),
                 'image':product.image.url
             }
