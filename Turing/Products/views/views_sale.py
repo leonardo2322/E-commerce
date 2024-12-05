@@ -16,6 +16,7 @@ class Show_product_view(LoginRequiredMixin,DetailView):
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
+        print(kwargs['object'],"show-----data")
         context["quantity"] = 1 
         return context
     
@@ -32,7 +33,6 @@ class Model_List_View(ListView):
             user = self.request.user
             profile = Profile.objects.get(user=user)
             cart.load_from_db(profile)
-
         return cart.cart.values()
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -52,14 +52,33 @@ class Add_cart_view(View):
     def post(self, request, *args, **kwargs):
         product_id = self.request.POST.get('product_id')
         quantity = int(self.request.POST.get('quantity', 1))
+        to_url = self.request.POST.get('to_url')
         product = get_object_or_404(Product, id=product_id)
-
         cart = Cart_manage(request)
         if quantity > 1:
             cart.add(product,quantity)
         else:
             cart.add(product)
-
-       
+        if to_url:
+            url = reverse('products')
+            return HttpResponseRedirect(url)
+        
         url = reverse('show_product', kwargs={'pk': product.pk})
         return HttpResponseRedirect(url)
+    
+class Remove_item_cart(View):
+    def post(self, request, *args, **kwargs):
+        product_id = kwargs.get('pk')
+        product = get_object_or_404(Product, id=product_id)
+        cart = Cart_manage(request)
+        cart.remove(product)
+        
+        url = reverse('cart')
+        return HttpResponseRedirect(url)
+    
+class Sale_items_cart(View):
+    pass
+        
+
+
+       

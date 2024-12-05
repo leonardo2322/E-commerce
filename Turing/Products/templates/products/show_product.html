@@ -148,6 +148,8 @@
   const form = document.getElementById('cart-form');
   const quantityInput = document.getElementById('quantity');
   const hiddenQuantity = document.getElementById('hidden-quantity')
+
+  
   form.addEventListener('submit', function (event){
     const quantity = parseInt(quantityInput.value, 10);
     if (quantity > 1) {

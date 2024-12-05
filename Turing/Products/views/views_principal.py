@@ -78,8 +78,6 @@ class login_View(LoginView):
         response = super().form_valid(form)
 
         user = self.request.user
-        user2 = self.request.user
-        print(user,user2,"-----------------en user")
         if not hasattr(user, 'profile'):
             Profile.objects.create(user=user)
 
@@ -88,9 +86,8 @@ class login_View(LoginView):
 
         return response
     
-    def get_success_url(self):
-        return reverse_lazy('profile_user')
-    
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
 
 class CategoryListView(ListView):
     model = Category

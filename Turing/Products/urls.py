@@ -1,7 +1,7 @@
 from django.urls import path
 from .views.views_principal import *
 from django.conf.urls import handler404, handler500
-from .views.views_sale import Show_product_view ,Model_List_View ,Add_cart_view
+from .views.views_sale import Show_product_view ,Model_List_View ,Add_cart_view,Remove_item_cart,Sale_items_cart
 handler404 = 'Products.views.error_404_view'
 handler500 = 'Products.views.error_500_view'
 urlpatterns = [
@@ -16,5 +16,7 @@ urlpatterns = [
     path('products/', ViewProducts.as_view(), name='products'),
     path('product/<int:pk>/', Show_product_view.as_view(), name='show_product' ),
     path('cart/', Model_List_View.as_view(), name='cart'),
-    path('add_to_cart/',Add_cart_view.as_view(), name='add_cart' )
+    path('add_to_cart/',Add_cart_view.as_view(), name='add_cart' ),
+    path('eliminar/<int:pk>/', Remove_item_cart.as_view(),name="Eliminar_Cart"),
+    path('comprar/',Sale_items_cart.as_view(), name='comprar' )
 ]

@@ -25,16 +25,20 @@ class Cart_manage:
                 'price':float(product.pvp),
                 'image':product.image.url
             }
-            print(self.cart,"---------en cart")
         else:
+            print(cant,type(cant))
             for key, value in self.cart.items():
-                if key == str(product.id):
+                if key == str(product.id) and cant is None:
                     value['cant'] = value['cant'] + 1
-                    
+                    break
+                # elif key == str(product.id) and cant == '1':
+                #     value['cant'] =  1
+                #     break
+                elif key == str(product.id) and cant:
+                    value['cant'] = float(cant)   
                     break
         self.save()
     def save(self):
-        print("----------------guardando")
         self.session['cart'] = self.cart
         self.session.modified = True
 
@@ -93,6 +97,8 @@ class Cart_manage:
         
         try:
             cart = Cart.objects.get(client=user)
+            print(cart)
+
             for item in cart.items.all():
                 self.cart[str(item.product.id)] = {
                     'id': item.product.id,

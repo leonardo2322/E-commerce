@@ -28,17 +28,39 @@
   <td>{{ item.price }}</td>
   <td>{{ item.cant }}</td>
   <td>
-    <button class="btn btn-primary btn-xs">
-      <i class="fa-solid fa-pen-to-square"></i>
-    </button>
-    <button class="btn btn-danger btn-xs">
+    <form action="{% url 'show_product' item.id %}">
+      <button class="btn btn-primary btn-xs" type="submit">
+        <i class="fa-solid fa-pen-to-square"></i>
+      </button>
+    </form>
+    <form action="{% url 'Eliminar_Cart' pk=item.id %}" method="post">
+       {% csrf_token %} 
+
+      <button class="btn btn-danger btn-xs" type="submit">
       <i class="fa-solid fa-trash-can"></i>
     </button>
+    </form>
   </td>
 </tr>
 
 {% endfor %} {% endblock columns %} 
 {% block buttonmoreitems %}
-    <h2 ><strong>Total Compra:</strong> {{ total_cart }} </h2>
+<div class="container">
+  <div class="d-flex justify-content-between">
+    <div><h2 ><strong>Total Compra:</strong> {{ total_cart }} </h2></div>
+    <div><form action="{% url 'comprar'  %}" method="post">
+          {% csrf_token %} 
+
+          <button class="btn btn-success btn-xs" type="submit">
+          <i class="fa-solid fa-shopping-cart p-2">Comprar</i>
+        </button>
+        </form></div>
+    
+  </div>
+</div>
+    
+
+    
+
  {% endblock buttonmoreitems %}
 
