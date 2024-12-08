@@ -30,6 +30,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='product/%Y/%m/%d', null=True, blank=True)
     pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=3)
     description = models.TextField(max_length=350,blank=True, null= True)
+    stock = models.IntegerField(null=True,blank=True, default=10)
     created = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return self.name
@@ -44,7 +45,9 @@ class Product(models.Model):
 class Cart(models.Model):
     client = models.OneToOneField(Profile, on_delete=models.CASCADE)
     total = models.DecimalField(default=0.00,max_digits=9, decimal_places=3)
+    status = models.CharField(max_length=20, default='pending')
     created = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.client.user}"
@@ -52,11 +55,15 @@ class Cart(models.Model):
     class Meta:
         verbose_name = 'carrito'
         ordering = ['id']
+    def complete_purchase(self):
+        self.status = 'completed'
+        self.save()
 
 class Cart_Item(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
     prods = models.ForeignKey(Product, on_delete=models.CASCADE)
     cant = models.IntegerField(default=1)
+    
     created = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -70,3 +77,17 @@ class Cart_Item(models.Model):
     class Meta:
         verbose_name = 'Detalle de carrito'
         ordering = ['id']
+
+
+class PurchaseHistory(models.Model):
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)  
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)  
+    total_price = models.DecimalField(max_digits=10, decimal_places=2) 
+    created_at = models.DateTimeField(auto_now_add=True)  
+    status = models.CharField(max_length=50, default='Completed')
+
+    def __str__(self):
+        return f"Purchase {self.id} by  on {self.created_at}"
+    
+    def calculate_total(self):
+        return self.total_price

@@ -5,7 +5,8 @@
 
 <section class="container">
     <div class="row">
-        <img src="{% static "img/img-not-found.png" %}" alt="">
+        <img src="{% static 'img/img-not-found.png' %}" alt="" class="img-fluid d-block mx-auto w-50 h-auto">
+
         <h1 class="display-4 text-danger mb-4">Error 500</h1>
         <p class="text-danger">Algo salió mal. Intenta nuevamente más tarde.</p>
         <a href="{% url "home" %}" class="btn btn-primary ">Volver al inicio</a>

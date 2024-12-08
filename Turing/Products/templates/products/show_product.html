@@ -34,10 +34,10 @@
               <input
                 type="number"
                 min="1"
-                id="quantity"
+                id="cant"
                 class="form-control text-center"
                 placeholder="0"
-                value="{{ quantity }}"
+                value="{{ cant }}"
                 aria-label="Cantidad"
               />
               <button
@@ -112,7 +112,7 @@
     
     if (total_price.innerText.length == 0){
       console.log(true)
-        let quantityInput = document.getElementById("quantity");
+        let quantityInput = document.getElementById("cant");
         let price = document.getElementById("price").innerText.replace(",", ".");
         total_price.innerText =
                             quantityInput.value * parseFloat(price.replace(/[^0-9.-]+/g, ""));
@@ -124,7 +124,7 @@
     const total_price = document.getElementById("total_price");
     const price = document.getElementById("price").innerText.replace(",", ".");
 
-    const quantityInput = document.getElementById("quantity");
+    const quantityInput = document.getElementById("cant");
     let currentValue = parseInt(quantityInput.value) || 1;
     if (currentValue > 1) {
       quantityInput.value = currentValue - 1;
@@ -136,7 +136,7 @@
   function increaseQuantity() {
     const total_price = document.getElementById("total_price");
     const price = document.getElementById("price").innerText.replace(",", ".");
-    const quantityInput = document.getElementById("quantity");
+    const quantityInput = document.getElementById("cant");
     console.log(price);
     let currentValue = parseInt(quantityInput.value) || 1;
     quantityInput.value = currentValue + 1;
@@ -146,7 +146,7 @@
 
 
   const form = document.getElementById('cart-form');
-  const quantityInput = document.getElementById('quantity');
+  const quantityInput = document.getElementById('cant');
   const hiddenQuantity = document.getElementById('hidden-quantity')
 
   

@@ -8,7 +8,6 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
-from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.db import IntegrityError
@@ -17,7 +16,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from ..models import Category, Product ,Profile
 from Products.utils.cart_utils import Cart_manage
 from ..forms import FormCreateCategory, FormCreateProduct
-
+from Products.utils.super_user_test import UserPassesTestMixin
 def vistaHome(request):
     return render(request, 'home.html')
 
@@ -82,14 +81,13 @@ class login_View(LoginView):
             Profile.objects.create(user=user)
 
         cart = Cart_manage(self.request)
-        cart.sync_with_db(user)
-
+        cart.sync_with_user(user)
         return response
     
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form))
 
-class CategoryListView(ListView):
+class CategoryListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
     model = Category
     template_name = 'Categoryes/listCategory.html'
 
@@ -104,8 +102,12 @@ class CategoryListView(ListView):
         context['title'] = 'listado_de_tareas'
         context['urls'] = reverse_lazy("create_category")
         return context
+        
+    def test_func(self):
+        return self.request.user.is_superuser
+
     
-class CreatItemCategory(CreateView):
+class CreatItemCategory(LoginRequiredMixin,UserPassesTestMixin,CreateView):
     model = Category
     form_class = FormCreateCategory
     template_name = 'Categoryes/createItemCategory.html'
@@ -115,8 +117,11 @@ class CreatItemCategory(CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Create Categoria'
         return context
-    
-class CreateItemProduct(CreateView):
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
+class CreateItemProduct(LoginRequiredMixin,UserPassesTestMixin,CreateView):
     model = Product
     form_class = FormCreateProduct
     template_name = 'products/createProduct.html'
@@ -144,11 +149,15 @@ class CreateItemProduct(CreateView):
         context['action'] = 'add'
         return context
     
-class ListViewProduct(LoginRequiredMixin,ListView):
+    def test_func(self):
+        return self.request.user.is_superuser
+    
+class ListViewProduct(LoginRequiredMixin,UserPassesTestMixin,ListView):
     model = Product
     template_name = 'products/listProduct.html'
     context_object_name = 'products'
     success_url = reverse_lazy("list_Product")
+  
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -156,6 +165,8 @@ class ListViewProduct(LoginRequiredMixin,ListView):
         context['urls'] = reverse_lazy("create_product")
         return context
     
+    def test_func(self):
+        return self.request.user.is_superuser
 
 
     
@@ -163,5 +174,6 @@ class ListViewProduct(LoginRequiredMixin,ListView):
 class ViewProducts(LoginRequiredMixin,ListView):
     model = Product
     template_name = 'products/CardsProducts.html'
-    
+    paginate_by = 9
+    ordering = ['-created']
     

@@ -1,0 +1,82 @@
+{% extends "base.html" %} {% block content %} {% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  <li class="{% if message.tags %}{{ message.tags }}{% endif %}">
+    {{ message }}
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<section class="container my-5">
+  <h2 class="text-center mb-4">Historial de Compras</h2>
+
+  {% if purchases_dict %}
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Fecha de Compra</th>
+          <th scope="col">Total</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Detalles</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for hour, compras in purchases_dict.items %}
+          <tr>
+            <td colspan="6" class="text-center"><strong>Compras a las {{ hour }}:00</strong></td>
+          </tr>
+          {% for _, compra in compras.items %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>{{ compra.created_at|date:"d/m/Y H:i" }}</td>
+              <td>${{ compra.total_compra }}</td>
+              <td>
+                <span class="badge {% if compra.estado == 'Completed' %}bg-success{% elif compra.estado == 'Pending' %}bg-warning{% else %}bg-danger{% endif %}">
+                  {{ compra.estado }}
+                </span>
+              </td>
+              <td>
+                <ul>
+                  {% for product, details in compra.detalles.items %}
+                    <li>
+                      <strong>{{ product }}</strong> - {{ details.cant }} x {{ details.price }}€
+                    </li>
+                  {% endfor %}
+                </ul>
+              </td>
+            </tr>
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="alert alert-info text-center" role="alert">
+      No tienes compras registradas aún.
+    </div>
+  {% endif %}
+</section>
+
+
+{% endblock content %}
+
+
+<!-- {% for hour, compras in purchases_dict.items %}
+                    <h3>Compras a las {{ hour }}:00</h3>
+                    {% for timestamp, compra in compras.items %}
+                        <p><strong>ID de Compra:</strong> {{ compra.compra_id }}</p>
+                        <p><strong>Total:</strong> {{ compra.total_compra }}</p>
+                        <p><strong>Estado:</strong> {{ compra.estado }}</p>
+                        
+                        <ul>
+                            {% for product, details in compra.detalles.items %}
+                                <li>
+                                    Producto: {{ product }}<br>
+                                    Cantidad: {{ details.cantidad }}<br>
+                                    Precio: {{ details.price }}€
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endfor %}
+                {% endfor %} -->

@@ -1,6 +1,14 @@
 {% extends "list.html" %}
 
-
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
 <h2>Tu carrito</h2>
 {% block head %}
 <tr>
@@ -48,6 +56,9 @@
 <div class="container">
   <div class="d-flex justify-content-between">
     <div><h2 ><strong>Total Compra:</strong> {{ total_cart }} </h2></div>
+
+    <div><a href="{% url "history" %}" class='btn btn-primary'>Historial de compras</a></div>
+
     <div><form action="{% url 'comprar'  %}" method="post">
           {% csrf_token %} 
 

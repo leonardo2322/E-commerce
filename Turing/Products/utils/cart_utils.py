@@ -1,4 +1,4 @@
-from Products.models import Cart ,Product, Cart_Item, Profile
+from Products.models import Cart ,Product, Cart_Item, Profile,PurchaseHistory
 class Cart_manage:
     def __init__(self,request):
         self.request = request
@@ -12,6 +12,7 @@ class Cart_manage:
     def cart_total_price(self):
         total = 0
         for key, value in self.cart.items():
+            print(value,"------------in value")
             total += float(value['cant']) * float(value['price'])
         return total
 
@@ -28,6 +29,7 @@ class Cart_manage:
         else:
             print(cant,type(cant))
             for key, value in self.cart.items():
+                print(cant)
                 if key == str(product.id) and cant is None:
                     value['cant'] = value['cant'] + 1
                     break
@@ -35,6 +37,7 @@ class Cart_manage:
                 #     value['cant'] =  1
                 #     break
                 elif key == str(product.id) and cant:
+                   
                     value['cant'] = float(cant)   
                     break
         self.save()
@@ -47,6 +50,17 @@ class Cart_manage:
         if product_id in self.cart:
             del self.cart[product_id]
             self.save()
+    def get_items(self):
+
+        return [
+            {
+                'id':item['id'],
+                'name' : item['name'],
+                'cant': item['cant'],
+                'pvp':float(item['price'])
+                ,'image':item['image']
+            } for item in self.cart.values()
+        ]
 
 
     def decrement(self, product):
@@ -67,47 +81,34 @@ class Cart_manage:
         self.session['cart'] = {}
         self.session.modified = True
 
-    def sync_with_user(self,user):
+    def sync_with_user(self, user):
         """
-        Sincroniza el carrito de la sesión con el carrito en la base de datos.
+        Sincroniza el carrito de la sesión con el historial de compras del usuario.
         """
         if not user.is_authenticated:
             return
-        
+
         # Obtener o crear el carrito en la base de datos
         cart, created = Cart.objects.get_or_create(client=user)
 
-        # Fusionar los datos de la sesión con la base de datos
-        for product_id , item in self.cart.items():
+        # Cálculo del total de la compra (por ejemplo, sumando los precios de los productos)
+        total_price = sum(item['price'] * item['cant'] for item in self.cart.values())
+
+        # Crear el historial de compra
+        purchase_history = PurchaseHistory.objects.create(
+            user=user,
+            cart=cart,
+            total_price=total_price
+        )
+
+        # Guardar el carrito de compras en el historial
+        for product_id, item in self.cart.items():
             product = Product.objects.get(id=item['id'])
-            cart_item, created = Cart_Item.objects.get_or_create(cart=cart,prods=product)
-            cart_item.cant = max(cart_item.cant,item['cant'])
+            cart_item, created = Cart_Item.objects.get_or_create(cart=cart, prods=product)
+            cart_item.cant = item['cant']
             cart_item.save()
 
+        self.clear()  # Limpiar el carrito de la sesión
 
-        self.clear()
+        return purchase_history
 
-    def load_from_db(self,user):
-        """
-        Carga el carrito desde la base de datos a la sesión.
-        """
-         
-        if not self.request.user.is_authenticated:
-            return
-        
-        try:
-            cart = Cart.objects.get(client=user)
-            print(cart)
-
-            for item in cart.items.all():
-                self.cart[str(item.product.id)] = {
-                    'id': item.product.id,
-                    'name': item.product.name,
-                    'cant': item.cant,
-                    'price': float(item.product.pvp),
-                    'image': item.product.image.url
-                }
-            self.save()
-        except Cart.DoesNotExist:
-            print("------------carrito no existente")
-            pass

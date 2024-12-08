@@ -1,8 +1,79 @@
 {% extends 'base.html' %} {% block content %} {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/cards.css' %}" />
+<div class="container-fluid">
+  <!-- Barra de búsqueda y filtros -->
+  <div class="row align-items-center mb-4">
+    <!-- Barra de búsqueda -->
+    <div class="col-md-6 col-sm-12">
+      <form method="GET" action="" class="d-flex">
+        {% csrf_token %}
+        <input type="text" name="search" class="form-control me-2" placeholder="Buscar..." value="{{ request.GET.search|default:'' }}">
+        <button class="btn btn-primary" type="submit">Buscar</button>
+      </form>
+    </div>
+
+    <!-- Botones de filtro -->
+    <div class="col-md-6 col-sm-12 text-md-end text-sm-start mt-2 mt-md-0">
+      <div class="btn-group" role="group" aria-label="Filtros">
+        <a href="?filter=todos" class="btn btn-outline-secondary{% if request.GET.filter == 'todos' %} active{% endif %}">Todos</a>
+        <a href="?filter=activos" class="btn btn-outline-success{% if request.GET.filter == 'activos' %} active{% endif %}">Activos</a>
+        <a href="?filter=completados" class="btn btn-outline-primary{% if request.GET.filter == 'completados' %} active{% endif %}">Completados</a>
+        <a href="?filter=pendientes" class="btn btn-outline-warning{% if request.GET.filter == 'pendientes' %} active{% endif %}">Pendientes</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controles de paginación -->
+  <div class="row">
+    <div class="col-12">
+      <nav aria-label="Page navigation" class="mb-4">
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+          <!-- Botón para la primera página -->
+          <li class="page-item">
+            <a class="page-link" href="?page=1&search={{ request.GET.search|default:'' }}&filter={{ request.GET.filter|default:'' }}" aria-label="Primera">
+              <span aria-hidden="true">Primera</span>
+            </a>
+          </li>
+          <!-- Botón para la página anterior -->
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ request.GET.search|default:'' }}&filter={{ request.GET.filter|default:'' }}" aria-label="Anterior">
+              <span aria-hidden="true">Anterior</span>
+            </a>
+          </li>
+          {% endif %}
+
+          <!-- Página actual -->
+          <li class="page-item disabled">
+            <a class="page-link">
+              Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            </a>
+          </li>
+
+          {% if page_obj.has_next %}
+          <!-- Botón para la página siguiente -->
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ request.GET.search|default:'' }}&filter={{ request.GET.filter|default:'' }}" aria-label="Siguiente">
+              <span aria-hidden="true">Siguiente</span>
+            </a>
+          </li>
+          <!-- Botón para la última página -->
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&search={{ request.GET.search|default:'' }}&filter={{ request.GET.filter|default:'' }}" aria-label="Última">
+              <span aria-hidden="true">Ultima</span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
 
 <main class="d-flex justify-content-center align-items-center">
-  <div class="container-fluid">
+
+    </div>
     <div class="row">
       {% for c in object_list %}
       <div class="col-md-2 offset-md-2 d-flex justify-content-center">
@@ -184,23 +255,20 @@
 
 {% endblock content %} {% block scripting %}
 <script>
-  
-  document.addEventListener('DOMContentLoaded',()=>{
+  document.addEventListener("DOMContentLoaded", () => {
     const form = document.querySelectorAll(".form_products");
     const currentURL = window.location.pathname;
 
-    form.forEach(form =>{
-      const value_input = form.querySelector(".to_url")
-      value_input.value = currentURL
-    })
+    form.forEach((form) => {
+      const value_input = form.querySelector(".to_url");
+      value_input.value = currentURL;
+    });
 
     form.addEventListener("submit", () => {
-      event.preventDefault()
-      form.submit()
+      event.preventDefault();
+      form.submit();
     });
-    
-
-  })
+  });
 </script>
 
 {% endblock scripting %}
