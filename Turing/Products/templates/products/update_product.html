@@ -2,24 +2,58 @@
 <section class="d-flex justify-content-center align-items-center" style="min-height: 100vh">
   <div class="card p-4 shadow" style="width: 100%; max-width: 400px; box-sizing: border-box">
     <h2 class="text-center mb-4">Actualizar Producto</h2>
-    <h4>Instancia del producto: {{ form.instance }}</h4>
-    <form method="post" enctype="multipart/form-data" novalidate>
+   <form method="post" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
-    {% for field in form %}
-        <div class="mb-3">
-            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-            {{ field }}  <!-- Renderiza el campo, que ahora debería tener los valores iniciales -->
-            {% if field.errors %}
-                <div class="invalid-feedback">
-                    {% for error in field.errors %}
-                        {{ error }}
-                    {% endfor %}
+        <p>Valor de field.value para pvp: {{ form.initial.pvp }}</p>
+        {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+
+                    {% if field.name == 'image' and field.value %}
+                        <!-- Mostrar vista previa de la imagen -->
+                        <div class="mb-2">
+                            <img src="{{ field.value.url }}" alt="Imagen actual" style="max-height: 150px; max-width: 150px;">
+                        </div>
+                    {% endif %}
+
+                    {% if field.name == 'pvp' %}
+            <!-- Campo personalizado para 'pvp' -->
+                    <p>Este es el campo 'pvp'. {{ field.value|default:field.initial|default:''|add:''|safe }} </p>
+                        <input type="number" 
+                            step="0.01" 
+                            name="{{ field.name }}" 
+                            id="{{ field.id_for_label }}" 
+                            value="{{ field.value|default:field.initial|default:''|add:''|safe  }}" 
+                            class="form-control" />
+                    {% elif field.name == 'cate' %}
+                        <select name="{{ field.name }}" id="{{ field.id_for_label }}" class="form-control">
+                            {% for choice in field.field.queryset %}
+                                <option value="{{ choice.pk }}" 
+                                        {% if choice.pk == field.value or choice.pk == field.initial %}selected{% endif %}>
+                                    {{ choice }} <!-- Muestra el nombre de la categoría -->
+                                </option>
+                            {% endfor %}
+                        </select>
+                    {% else %}
+                        <!-- Otros campos -->
+                        <input type="{{ field.field.widget.input_type }}" 
+                            name="{{ field.name }}" 
+                            id="{{ field.id_for_label }}" 
+                            value="{{ field.value|default:field.initial|default:'' }}" 
+                            class="form-control" />
+                    {% endif %}
+
+                    {% if field.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in field.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
-            {% endif %}
-        </div>
-    {% endfor %}
-    <button type="submit" class="btn btn-primary">Actualizar</button>
-</form>
+            {% endfor %}
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+    </form>
   </div>
 </section>
 

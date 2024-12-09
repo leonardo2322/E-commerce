@@ -4,7 +4,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import  UpdateView
 from Products.models import Category, Product
 from django.views.generic import  View
-
+from Products.forms import Product_Form
 
 class Category_Delete_View(View):
     def post(self, request, *args, **kwargs):
@@ -36,32 +36,45 @@ class Product_delete_view(View):
 class Product_update_view(UpdateView):
     model = Product
     template_name = "products/update_product.html"
-    fields = ['name', 'cate', 'image', 'pvp', 'description', 'stock']
     success_url = reverse_lazy('list_Product')
+    form_class = Product_Form
 
+
+    def form_valid(self, form):
+        print("aqui")
+        self.object = form.save()  # Guarda la instancia del modelo
+        return HttpResponseRedirect(self.get_success_url())
+            
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        print("Errores del formulario:", form.errors)
+        return response
+    
     def get_form(self):
         form = super().get_form()
+        product = self.get_object()
+        if form.instance.pvp:
+            form.instance.pvp = str(form.instance.pvp).replace(',', '')
+        form.fields['cate'].initial = product.cate.pk
         form.initial = {
-                'name': form.instance.name,
-                'cate': form.instance.cate,
-                'image': form.instance.image,
-                'pvp': form.instance.pvp,
-                'description': form.instance.description,
-                'stock': form.instance.stock,
-            }
-        form.instance = self.get_object()
-        print(form.instance,"sassadssad")
+            'name': self.object.name,
+            'cate': self.object.cate,
+            'image': self.object.image,
+            'pvp': self.object.pvp,
+            'description': self.object.description,
+            'stock': self.object.stock,
+        }
         for field_name, field in form.fields.items():
-            if field.widget.__class__.__name__ == 'Textarea':  # Si el widget es un textarea
+            if field.widget.__class__.__name__ == 'Textarea':
                 field.widget.attrs.update({
-                    'class': 'form-control',  # Clase Bootstrap
-                    'style': 'height: 100px; width: 100%; resize: vertical;',  # Tamaño ajustable
-                    'placeholder': 'Ingresa una descripción breve...'  # Placeholder
+                    'class': 'form-control', 
+                    'style': 'height: 100px; width: 100%; resize: vertical;', 
+                    'placeholder': 'Ingresa una descripción breve...'  
                 })
             else:
                 field.widget.attrs.update({
-                    'class': 'form-control',  # Clase estándar para otros inputs
+                    'class': 'form-control',  
                 })
-        print(form.initial,"sassadssad")
-        
+        print("Valor inicial de cate (pk):", form.fields['cate'].initial)
         return form
+  

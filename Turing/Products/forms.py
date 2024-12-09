@@ -1,3 +1,4 @@
+from django import forms
 from django.forms import ModelForm,TextInput
 from .models import Category, Product
 
@@ -43,3 +44,18 @@ class FormCreateProduct(ModelForm):
            data['errors'] = form.errors
             
        return data
+    
+
+class Product_Form(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'cate', 'image', 'pvp', 'description', 'stock']
+        widgets = {
+            'pvp': forms.NumberInput(attrs={'step': '0.01', 'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['cate'].queryset = Category.objects.all() 
+        if self.instance and self.instance.pvp:
+            self.fields['pvp'].initial = float(self.instance.pvp)
