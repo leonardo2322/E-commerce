@@ -32,6 +32,7 @@ class Product(models.Model):
     description = models.TextField(max_length=350,blank=True, null= True)
     stock = models.IntegerField(null=True,blank=True, default=10)
     created = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.name
 

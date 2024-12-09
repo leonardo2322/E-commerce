@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<section class="d-flex justify-content-center align-items-center vh-100">
+  <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
+    <h2 class="text-center mb-4">Actualizar Categoría</h2>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="mb-3">
+         <!-- <label for="id" class="form-label">ID</label>
+        <input type="text" name="id" class="form-control {% if form.name.errors %}is-invalid{% endif %}" disabled> -->
+        <label for="id_name" class="form-label">Nombre</label>
+        <input 
+          type="text" 
+          class="form-control {% if form.name.errors %}is-invalid{% endif %}" 
+          id="id_name" 
+          name="name" 
+          value="{{ form.name.value|default_if_none:'' }}" 
+          placeholder="Nombre de la categoría"
+        >
+        {% for error in form.name.errors %}
+        <div class="invalid-feedback">
+          {{ error }}
+        </div>
+        {% endfor %}
+      </div>
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+
+
+{% endblock content %}

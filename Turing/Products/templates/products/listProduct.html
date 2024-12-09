@@ -22,16 +22,61 @@
       style="width: 40px; height: auto"
     />
   </td>
-  <td>{{ c.pvp }}</td>
+  <td>{{ c.pvp|floatformat:2 }}</td>
 
   <td>
-    <button class="btn btn-primary btn-xs">
-      <i class="fa-solid fa-pen-to-square"></i>
-    </button>
-    <button class="btn btn-danger btn-xs">
-      <i class="fa-solid fa-trash-can"></i>
-    </button>
+    <form action="{% url 'update_product' c.pk %}" method="post">
+      {% csrf_token %}
+      <button class="btn btn-primary btn-xs" type="submit">
+        <i class="fa-solid fa-pen-to-square"></i>
+      </button>
+    </form>
+    <form
+      action="{% url 'delete_product'  c.pk %}"
+      class="form_p"
+      method="post"
+    >
+      {% csrf_token %}
+      <button class="dbutton btn btn-danger btn-xs" type="submit">
+        <i class="fa-solid fa-trash-can"></i>
+      </button>
+    </form>
   </td>
 </tr>
 
-{% endfor %} {% endblock columns %}
+{% endfor %} {% endblock columns %} {% block scripting %} {{ block.super }}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const botones = document.querySelectorAll(".dbutton");
+    console.log(botones);
+
+    botones.forEach((btn) => {
+      btn.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        const formId = btn.parentElement.className;
+        const form = document.querySelector(`.${formId}`);
+
+        if (!form) {
+          console.error(`Formulario con selector ${formId} no encontrado.`);
+          return;
+        }
+
+        Swal.fire({
+          title: "¿Estás seguro?",
+          text: "¡No podrás revertir esto!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          cancelButtonColor: "#3085d6",
+          confirmButtonText: "¡Sí, eliminar!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            form.submit();
+          }
+        });
+      });
+    });
+  });
+</script>
+{% endblock scripting %}
