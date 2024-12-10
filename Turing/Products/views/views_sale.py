@@ -120,7 +120,7 @@ class Sale_items_cart(View):
                         )
                 purchase = PurchaseHistory.objects.create(
                 user=request.user.profile,
-                cart=cartitem,
+                cart=cartbd,
                 total_price=cartbd.total,
                 status="Complete"  # Cambiar si tienes diferentes estados
                 ) 
@@ -167,13 +167,19 @@ class List_hystory_purchase(LoginRequiredMixin,ListView):
             grouped_purchases[purchase_time].append(purchase)
        
         detalles = {
-                    indice: {
-                        'compra_id': compra.id,'total_compra': compra.total_price,'created_at': compra.created_at,'estado': compra.status,'detalles': {'cant': item.cant,'price': item.pvp}
-                        }
-                    for indice, item in grouped_purchases.items()
-                    for compra in item
-                    for item in compra.cart.prods
+                indice: {
+                    'compra_id': compra.id,
+                    'total_compra': compra.total_price,
+                    'created_at': compra.created_at,
+                    'estado': compra.status,
+                    'detalles': [
+                        {'cant': item.cant, 'price': item.prods.pvp}  
+                        for item in compra.cart.items.all()  
+                    ]
                 }
+                for indice, item_group in grouped_purchases.items()
+                for compra in item_group
+            }
         print(detalles)
 
         # for hour, compras in grouped_purchases.items():
@@ -211,6 +217,6 @@ class List_hystory_purchase(LoginRequiredMixin,ListView):
 
         print(grouped_purchases)
         context = {
-                'purchases_dict': purchases_dict,
+                'purchases_dict': detalles,
             }
         return context

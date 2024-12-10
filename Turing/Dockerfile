@@ -1,10 +1,10 @@
-FROM python:3.13-alpine
+FROM python:3.10-alpine
 
 WORKDIR /app
 
-COPY E-commerce/Turing/requirements.txt requirements.txt
+COPY ./requirements.txt requirements.txt
 
-RUN pip install --no-cache-dir -r /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt --index-url=https://pypi.org/simple/
 
 COPY . . 
 

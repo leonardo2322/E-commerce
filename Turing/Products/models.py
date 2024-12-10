@@ -66,7 +66,6 @@ class Cart_Item(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
     prods = models.ForeignKey(Product, on_delete=models.CASCADE)
     cant = models.IntegerField(default=1)
-    
     created = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -84,11 +83,10 @@ class Cart_Item(models.Model):
 
 class PurchaseHistory(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)  
-    cart = models.ForeignKey(Cart_Item, on_delete=models.CASCADE)  
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)  
     total_price = models.DecimalField(max_digits=10, decimal_places=2) 
     created_at = models.DateTimeField(auto_now_add=True)  
     status = models.CharField(max_length=50, default='Completed')
-
     def __str__(self):
         return f"Purchase {self.id} by  on {self.created_at}"
     
