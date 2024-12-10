@@ -175,7 +175,7 @@ class List_hystory_purchase(LoginRequiredMixin,ListView):
                     'detalles': [
                         {indice:{'name':item.prods.name,'cant': item.cant, 'price': item.prods.pvp}} 
                         for item in compra.cart.items.all() 
-                        if str(indice) == str(compra.created_at.strftime('%H:%M'))
+                        if str(indice) == str(item.created.strftime('%H:%M'))
                     ]
                 }
                 for indice, item_group in grouped_purchases.items()
