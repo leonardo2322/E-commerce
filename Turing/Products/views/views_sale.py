@@ -173,49 +173,23 @@ class List_hystory_purchase(LoginRequiredMixin,ListView):
                     'created_at': compra.created_at,
                     'estado': compra.status,
                     'detalles': [
-                        {'cant': item.cant, 'price': item.prods.pvp}  
-                        for item in compra.cart.items.all()  
+                        {indice:{'name':item.prods.name,'cant': item.cant, 'price': item.prods.pvp}} 
+                        for item in compra.cart.items.all() 
+                        if str(indice) == str(compra.created_at.strftime('%H:%M'))
                     ]
                 }
                 for indice, item_group in grouped_purchases.items()
                 for compra in item_group
+                if any(
+                        str(indice) == str(compra.created_at.strftime('%H:%M'))  
+                        for compra in item_group
+                    )
+                
             }
         print(detalles)
 
-        # for hour, compras in grouped_purchases.items():
-        #     for compra in compras:
-        #         # Asegurarse de que la hora está en purchases_dict
-        #         if hour not in purchases_dict:
-        #             purchases_dict[hour] = {}
+   
 
-        #         # Agregar detalles de la compra en purchases_dict bajo la clave de created_at
-        #         if compra.created_at not in purchases_dict[hour]:
-        #             purchases_dict[hour][compra.created_at] = {
-        #                 'compra_id': compra.id,
-        #                 'total_compra': compra.total_price,
-        #                 'created_at': compra.created_at,
-        #                 'estado': compra.status,
-        #                 'detalles': {}
-        #             }
-
-        #         # Recorriendo los productos de la compra
-        #         for item in compra.cart:
-        #             if item.name not in purchases_dict[hour][compra.created_at]['detalles']:
-        #                 purchases_dict[hour][compra.created_at]['detalles'][item.name] = {
-        #                     'cant': item.cant,
-        #                     'price': item.pvp
-        #                 }
-        #             else:
-        #                 # Si el producto ya existe, sumar la cantidad
-        #                 purchases_dict[hour][compra.created_at]['detalles'][item.name]['cant'] += item.cant
-
-
-        # for hour, purchases in purchases_dict.items():
-        #     for date_key, compra in purchases.items():
-        #         # Filtramos los detalles cuyo id coincida con la hora de la compra
-        #         compra['detalles'] = {name: details for name, details in lista_detalle.items() if details['id'] == hour}
-
-        print(grouped_purchases)
         context = {
                 'purchases_dict': detalles,
             }
