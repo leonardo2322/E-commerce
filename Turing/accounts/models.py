@@ -7,6 +7,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="profile")
     image = models.ImageField(default='users/image_empty.png', upload_to="users/")
     location = models.CharField( max_length=80,null=True,blank=True)
+    email = models.EmailField( max_length=254,unique=True)
 
     class Meta:
         verbose_name = 'Perfil'

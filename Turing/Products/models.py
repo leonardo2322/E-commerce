@@ -15,7 +15,8 @@ gender_choices = (
 )
 class Category(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
-
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return '{}'.format(self.name)
 
