@@ -59,6 +59,7 @@ class Cart(models.Model):
     def complete_purchase(self):
         self.status = 'completed'
         self.save()
+        print("exito")
 
 class Cart_Item(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
@@ -82,7 +83,7 @@ class Cart_Item(models.Model):
 
 class PurchaseHistory(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)  
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)  
+    cart = models.ForeignKey(Cart_Item, on_delete=models.CASCADE)  
     total_price = models.DecimalField(max_digits=10, decimal_places=2) 
     created_at = models.DateTimeField(auto_now_add=True)  
     status = models.CharField(max_length=50, default='Completed')

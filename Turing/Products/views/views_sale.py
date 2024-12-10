@@ -92,9 +92,9 @@ class Sale_items_cart(View):
                 total_cart = cart.cart_total_price()
 
                 cartbd = Cart.objects.filter(client=request.user.profile).first()
-
                 if not cartbd:  # Si no existe un carrito, creamos uno nuevo
                     cartbd = Cart.objects.create(client=request.user.profile, total=total_cart)
+
                 else:
                     cartbd.total = total_cart
                     cartbd.save()
@@ -113,24 +113,24 @@ class Sale_items_cart(View):
                     product.stock -= int(item['cant'])
                     product.save()
 
-                    Cart_Item.objects.create(
+                    cartitem =Cart_Item.objects.create(
                         cart=cartbd,
                         prods=product,
                         cant = int(item['cant'])
                         )
-                PurchaseHistory.objects.create(
+                purchase = PurchaseHistory.objects.create(
                 user=request.user.profile,
-                cart=cartbd,
+                cart=cartitem,
                 total_price=cartbd.total,
                 status="Complete"  # Cambiar si tienes diferentes estados
-                )  
+                ) 
                 cartbd.complete_purchase()
                 cart.clear()
         except Product.DoesNotExist:
             print("Producto no encontrado.")
             return HttpResponseRedirect(reverse('cart'), status=404)
         except Exception as e:
-            print(str(e))
+            print(str(e),"-----------este error")
             traceback.print_exc()
             return HttpResponseServerError(render(request, '500.html', status=500))
         
@@ -165,10 +165,16 @@ class List_hystory_purchase(LoginRequiredMixin,ListView):
         for purchase in purchases:
             purchase_time = purchase.created_at.strftime('%H:%M')  # Agrupar por hora y minuto
             grouped_purchases[purchase_time].append(purchase)
-        purchases_dict = {
-        }
-        lista_detalle = {}
-
+       
+        detalles = {
+                    indice: {
+                        'compra_id': compra.id,'total_compra': compra.total_price,'created_at': compra.created_at,'estado': compra.status,'detalles': {'cant': item.cant,'price': item.pvp}
+                        }
+                    for indice, item in grouped_purchases.items()
+                    for compra in item
+                    for item in compra.cart.prods
+                }
+        print(detalles)
 
         # for hour, compras in grouped_purchases.items():
         #     for compra in compras:
