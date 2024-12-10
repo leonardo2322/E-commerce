@@ -5,7 +5,7 @@ from .models import Profile
 class Profile_Form(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['image', 'location']
+        fields = ['image', 'location','email']
   
 
     def __init__(self, *args, **kwargs):
