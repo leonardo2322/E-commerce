@@ -1,55 +1,80 @@
-{% extends 'base.html' %} {% block content %} {% if form.errors %}
+{% extends 'base.html' %} 
+{% block content %} 
+{% if form.errors %}
 <div class="mt-5 mb-5 bg-danger">{{ form.errors }}</div>
 <div class="mt-5 mb-5 bg-danger">
   {% if status == 'error' %}
   <div class="error">{{ error_message }}</div>
-  {% endif %} {% if status == 'success' %}
+  {% endif %} 
+  {% if status == 'success' %}
   <div class="success">
     ¡Usuario creado con éxito! Por favor, inicia sesión.
   </div>
   {% endif %}
 </div>
 {% endif %}
+
 <div class="container">
   <div class="row">
-    <div class="col-md-4 offset-md-4">
-      <form class="form" method="post">
+    <div class="col-md-6 offset-md-3">
+      <form class="form h-100" method="post">
         {% csrf_token %}
         <div class="title">
           Welcome,
           <br />
           <span>sign up to continue</span>
         </div>
+        
+        <!-- Input Username -->
         <label for="username" class="text-light">Nombre del Usuario:</label>
         <input
           type="text"
           placeholder="nombre de usuario"
           name="username"
           id="username"
-          class="input"
+          class="input form-control mb-3"
         />
-        <label for="password1" class="text-light">password</label>
+
+        <!-- Input Email -->
+        <label for="email" class="text-light">Correo Electrónico:</label>
+        <input
+          type="email"
+          placeholder="correo electrónico"
+          name="email"
+          id="email"
+          class="input form-control mb-3"
+        />
+
+        <!-- Input Password -->
+        <label for="password1" class="text-light">Contraseña:</label>
         <input
           type="password"
           placeholder="Password1"
           name="password1"
           id="password1"
-          class="input"
+          class="input form-control mb-3"
         />
-        <label for="password2" class="text-light">Verificar</label>
+
+        <!-- Input Password Verification -->
+        <label for="password2" class="text-light">Verificar Contraseña:</label>
         <input
           type="password"
-          placeholder="verificacion de la contraseña"
+          placeholder="verificación de la contraseña"
           name="password2"
           id="password2"
-          class="input"
+          class="input form-control mb-3"
         />
-        <div class="login-with">
+
+        <div class="login-with d-flex justify-content-between">
           <div class="button-log">🐱</div>
+          <button class="button-confirm btn btn-success" type="submit">Start Now →</button>
         </div>
-        <button class="button-confirm" type="submit">Start Now →</button>
+
+        <!-- Submit Button -->
+        
       </form>
     </div>
   </div>
 </div>
+
 {% endblock content %}

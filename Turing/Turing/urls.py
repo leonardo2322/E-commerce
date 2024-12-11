@@ -15,10 +15,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.shortcuts import render
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 from accounts.views import Profile_user_view,Profile_Image_Update_View,Profile_Image_Delete_View ,Profile_update_view
+from django.conf.urls import handler404, handler500, handler403
+
+def custom_500_view(request, exception=None):
+    return render(request, '500.html', status=500)
+def custom_404_view(request, exception=None):
+    return render(request, '404.html', status=404)
+def custom_403_view(request, exception=None):
+    return render(request, '403.html', status=403)
+handler403 = custom_403_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Products.urls')),

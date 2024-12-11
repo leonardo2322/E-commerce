@@ -18,7 +18,13 @@ class Profile_user_view(LoginRequiredMixin,DetailView):
         # Retorna el usuario actualmente autenticado
         return self.request.user.profile
 
-    
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+        user = self.get_object()
+        context['user_email'] = user.email
+        self.request.user
+        print( self.request.user.profile,"aqui")
+        return context
 class Profile_Image_Update_View(LoginRequiredMixin, UpdateView):
     model = Profile
     fields = ['image']  # Campos que queremos editar
