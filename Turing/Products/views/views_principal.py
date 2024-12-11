@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.views import LoginView
-from django.contrib.auth.forms import UserCreationForm
+
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.db import IntegrityError
@@ -17,6 +17,7 @@ from ..models import Category, Product ,Profile
 from Products.utils.cart_utils import Cart_manage
 from ..forms import FormCreateCategory, FormCreateProduct
 from Products.utils.super_user_test import UserPassesTestMixin
+from accounts.forms import CustomUserCreationForm
 def vistaHome(request):
     return render(request, 'home.html')
 
@@ -33,35 +34,19 @@ class SignUpView(CreateView):
     model = User
     template_name = 'registration/signup.html'
     success_url = reverse_lazy('login')
-    form_class = UserCreationForm
+    form_class = CustomUserCreationForm
     
     def form_valid(self, form):
+        # Guardar el usuario y dejar que las señales manejen el perfil
         try:
-            # Guardar el usuario
-            user = form.cleaned_data['username']
-            if User.objects.filter(username=user).exists():
-                return render(self.request, self.template_name, {
-                    'form': form,
-                    'error_message': 'El nombre de usuario ya está en uso.',
-                    'status': 'error'
-                })
-            if form.cleaned_data['password1'] != form.cleaned_data['password2']:
-                return render(self.request, self.template_name, {
-                    'form': form,
-                    'error_message': 'Las contraseñas no coinciden.',
-                    'status': 'error'
-                })
-                    
             user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password1'])
+            user.set_password(form.cleaned_data['password1'])  # Asegúrate de que la contraseña esté bien configurada
             user.save()
             return redirect(self.success_url)
-        except IntegrityError:
-             return render(self.request, self.template_name, {
-                'form': form,
-                'error_message': 'Error al crear el usuario. Puede que ya exista.',
-                'status': 'error'
-            })
+        except Exception as e:
+            print(str(e))
+        return redirect(self.success_url)
+       
 
     def form_invalid(self, form):
         return render(self.request, self.template_name, {

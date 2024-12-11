@@ -1,6 +1,22 @@
 from django import forms
 from .models import Profile
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
+
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True, help_text="Introduce una dirección de correo válida.")
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()
+        return user
 
 class Profile_Form(forms.ModelForm):
     class Meta:
@@ -13,8 +29,7 @@ class Profile_Form(forms.ModelForm):
         if self.instance and self.instance.pk:
             # Accedemos al usuario relacionado (join implícito por OneToOneField)
             user = self.instance.user
-      
-            print("Usuario relacionado:", user.username)
+            self.fields['email'].initial = user.email
 
     def clean(self):
         cleaned_data = super().clean()

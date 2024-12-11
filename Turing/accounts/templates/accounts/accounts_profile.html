@@ -81,7 +81,7 @@
         </p>
         <p class="card-text">
           <strong>Correo:</strong>
-          {{ user_email|default:"No especificada" }}
+          {{ profile.email|default:"No se ha proporcionado" }}
         </p>
         <form
           method="post"
