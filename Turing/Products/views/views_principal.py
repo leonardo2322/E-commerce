@@ -37,10 +37,10 @@ class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     
     def form_valid(self, form):
-        # Guardar el usuario y dejar que las señales manejen el perfil
+        
         try:
             user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password1'])  # Asegúrate de que la contraseña esté bien configurada
+            user.set_password(form.cleaned_data['password1']) 
             user.save()
             return redirect(self.success_url)
         except Exception as e:

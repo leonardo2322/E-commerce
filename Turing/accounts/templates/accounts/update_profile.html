@@ -13,25 +13,17 @@
         {% csrf_token %}
         <!-- Email -->
         <div class="mb-4">
-          <label for="{{ form.email.id_for_label }}" class="form-label">
-            Correo Electrónico
-          </label>
-          {{ form.email|add_class:"form-control" }}
-        </div>
-        <!-- Imagen de perfil -->
-        <div class="mb-4">
-          <label for="{{ form.image.id_for_label }}" class="form-label">
-            Imagen de perfil
-          </label>
-          {{ form.image|add_class:"form-control" }}
-        </div>
-        <!-- Ubicación -->
-        <div class="mb-4">
-          <label for="{{ form.location.id_for_label }}" class="form-label">
-            Ubicación
-          </label>
-          {{ form.location|add_class:"form-control" }}
-        </div>
+        <label for="{{ form.email.id_for_label }}" class="form-label">Correo Electrónico</label>
+        <input type="email" name="email" value="{{ form.email.initial }}" class="form-control" />
+    </div>
+    <div class="mb-4">
+        <label for="{{ form.image.id_for_label }}" class="form-label">Imagen de perfil: {{ form.image.initial }}</label>
+        <input type="file" name="image" class="form-control" value="{{ form.image.initial }}" />
+    </div>
+    <div class="mb-4">
+        <label for="{{ form.location.id_for_label }}" class="form-label">Ubicación</label>
+        <input type="text" name="location" value="{{ form.location.initial|default:'' }}" class="form-control" placeholder="Rellene este campo: opcional"/>
+    </div>
         <!-- Mostrar errores -->
         {% if form.errors %}
         <div class="alert alert-danger">
