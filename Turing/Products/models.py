@@ -34,8 +34,22 @@ class Product(models.Model):
     stock = models.IntegerField(null=True,blank=True, default=10)
     created = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.name
+    
+    def delete(self, *args, **kwargs):
+        cart_items = Cart_Item.objects.filter(prods=self)
+        
+        # Recorrer los cart_items y eliminar los carritos vacíos
+        for item in cart_items:
+            cart = item.cart
+            item.delete()
+            if not cart.items.exists():  # Si el carrito no tiene más elementos
+                cart.delete()
+
+        # Eliminar el producto
+        super().delete(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Producto'

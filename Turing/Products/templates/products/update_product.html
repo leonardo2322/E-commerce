@@ -18,7 +18,6 @@
 
                     {% if field.name == 'pvp' %}
             <!-- Campo personalizado para 'pvp' -->
-                    <p>Este es el campo 'pvp'. {{ field.value|default:field.initial|default:''|add:''|safe }} </p>
                         <input type="number" 
                             step="0.01" 
                             name="{{ field.name }}" 

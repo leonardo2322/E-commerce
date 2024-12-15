@@ -1,5 +1,6 @@
+from typing import Any
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import ListView,CreateView ,DetailView
 # from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
@@ -161,4 +162,26 @@ class ViewProducts(LoginRequiredMixin,ListView):
     template_name = 'products/CardsProducts.html'
     paginate_by = 9
     ordering = ['-created']
+    
+    def get_queryset(self):
+        busqueda = self.request.GET.get('search', '')
+        filtro = self.request.GET.get('filter','')
+        if busqueda:
+            queryset = Product.objects.filter(name__icontains=busqueda)
+            return queryset
+        if filtro:
+            if filtro == 'todos':
+                queryset = Product.objects.all()
+                return queryset
+            categoria_obj  = get_object_or_404(Category, name=filtro)
+            queryset = Product.objects.filter(cate=categoria_obj)
+            return queryset
+        queryset = Product.objects.all()
+        return queryset
+    
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["categoryes"] = Category.objects.all()
+        return context
+    
     
