@@ -1,0 +1,17 @@
+# Ignorar la carpeta de Git
+.git/
+
+# Ignorar variables de entorno
+.env
+
+# Ignorar dependencias locales
+node_modules/
+__pycache__/
+
+# Ignorar archivos del editor
+*.pyc
+*.pyo
+*.swp
+
+# Ignorar el archivo docker-compose.yml
+docker-compose.yml
