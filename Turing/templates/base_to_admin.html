@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recetas y Materia Prima</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #3d332d; /* Color de fondo similar al diseño */
+      }
+      .sidebar {
+        background-color: #5c503c; /* Color similar a la barra lateral */
+        min-height: 100vh;
+      }
+      .sidebar a {
+        color: #fff;
+        text-decoration: none;
+      }
+      .sidebar a.active {
+        color: #efb810; /* Color cuando el enlace está activo */
+      }
+      .sidebar a:hover {
+        color: #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Barra lateral -->
+        <nav
+          class="col-md-2 d-none d-md-block sidebar py-3 d-flex flex-column"
+          style="height: 100vh"
+        >
+          <h4 class="text-white ms-3 text-center">Menú</h4>
+          <ul
+            class="nav flex-column w-100 d-flex flex-column justify-content-between"
+            style="flex-grow: 1"
+          >
+            <li class="nav-item">
+              <a class="nav-link active text-center" href="#">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active text-center" href="#">Estadísticas</a>
+            </li>
+            <li class="nav-item">
+              <!-- Menú colapsable "Registros" -->
+              <a
+                class="nav-link active text-center"
+                data-bs-toggle="collapse"
+                href="#collapseRegistros"
+                role="button"
+                aria-expanded="false"
+                aria-controls="collapseRegistros"
+              >
+                Registros
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-chevron-compact-down"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67"
+                  />
+                </svg>
+              </a>
+              <div class="collapse" id="collapseRegistros">
+                <ul class="nav flex-column ms-3">
+                  <li class="nav-item">
+                    <a class="nav-link active text-center" href="#">
+                      Registro Receta
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active text-center" href="#">
+                      Registros Contables
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active text-center" href="#">Clientes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active text-center" href="#">Cerrar sesión</a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Contenido principal -->
+        <main class="col-md-10 ms-sm-auto px-md-4">
+          <div class="pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2 text-white">Recetas y Materia Prima</h1>
+          </div>
+          <div class="bg-light p-4 rounded">
+            <h2>Ingredientes</h2>
+            <button class="btn btn-primary mb-3">Agregar Ingrediente</button>
+            <button class="btn btn-secondary mb-3">Mostrar Ingredientes</button>
+
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Fecha Actualizado</th>
+                  <th>Nombre</th>
+                  <th>Cantidad</th>
+                  <th>kg/gr</th>
+                  <th>Precio</th>
+                  <th>Opciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>2024-12-18</td>
+                  <td>Azúcar</td>
+                  <td>1.0</td>
+                  <td>Kg</td>
+                  <td>0.0013</td>
+                  <td>
+                    <button class="btn btn-sm btn-primary">Editar</button>
+                    <button class="btn btn-sm btn-danger">Eliminar</button>
+                  </td>
+                </tr>
+                <!-- Más filas aquí -->
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

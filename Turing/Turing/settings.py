@@ -41,7 +41,12 @@ INSTALLED_APPS = [
     'Products.apps.ProductsConfig',
     'accounts',
     'crispy_forms',
-    'crispy_tailwind'
+    'crispy_tailwind',
+    'Recetas',
+    'Registros',
+    'Estadistica',
+    'Proveedores',
+    'Compradores'
 ]
 
 MIDDLEWARE = [

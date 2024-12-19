@@ -32,6 +32,7 @@ handler403 = custom_403_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Products.urls')),
+    path('recetas/',include('Recetas.urls')),
     path('accounts/',include("django.contrib.auth.urls")),
     path('accounts/profile/', Profile_user_view.as_view(), name="profile_user"),
     path('upload_image/', Profile_Image_Update_View.as_view(), name='upload_image'),
