@@ -26,9 +26,9 @@ class Ingrediente(models.Model):
         return self.nombre_i
 
 class Receta(models.Model):
-    nombre_r = models.CharField(verbose_name='nombre de la Receta',max_length=50)
+    nombre_r = models.CharField(verbose_name='nombre de la Receta',max_length=50,unique=True)
     cantidad_p_r = models.DecimalField(verbose_name='cantidad_producida_de_receta',max_digits=12, decimal_places=2)
-    porcentaje_venta = models.IntegerField(verbose_name='Porcentaje de venta')
+    porcentaje_venta = models.IntegerField(verbose_name='Porcentaje de ganancia')
     precio = models.DecimalField(verbose_name='Precio que se quiere para venta',max_digits=12, decimal_places=2)
     unidades_x_r = models.DecimalField(verbose_name='Cantidad que arroja la receta',max_digits=12, decimal_places=2)
     cant_x_paquete = models.IntegerField(verbose_name='Unidades por paquete')

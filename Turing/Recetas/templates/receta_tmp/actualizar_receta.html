@@ -1,0 +1,74 @@
+{% extends "base_to_admin.html" %} {% load custom_filters %} {% block content %}
+
+<div class="card mt-3 text-white" style="background-color: rgb(2, 0, 26)">
+  <div class="card-header">Agregar receta</div>
+
+  <div
+    class="card-body text-center d-flex justify-content-center"
+    style="background-color: rgb(2, 0, 26)"
+  >
+    <form
+      action=""
+      class="form-group col-md-6"
+      method="post"
+      enctype="multipart/form-data"
+    >
+    <p class="text-warning">si cambia algun valor introduzcalo con punto ('.')</p>
+      {% csrf_token %}
+      <input type="hidden" name="action" value="{{ action }}" />
+      {% for field in form %}
+      <div class="mb-3">
+        <label for="{{ field.id_for_label }}" class="form-label">
+          {{ field.label }}
+        </label>
+        {% if field.field.widget.input_type == 'text' %}
+        <input
+          type="{{ field.field.widget.input_type }}"
+          name="{{ field.name }}"
+          id="{{ field.id_for_label }}"
+          value="{{ field.initial|replace  }}"
+          step="0.1"
+          lang="es"
+          class="form-control bg-dark text-white"
+        />
+        {% elif field.name == 'costo_receta' %}
+        <input
+          type="{{ field.field.widget.input_type }}"
+          name="{{ field.name }}"
+          id="{{ field.id_for_label }}"
+          value="{{ field.initial|replace  }}"
+          step="0.1"
+          lang="es"
+          readonly
+          class="form-control bg-dark text-white"
+        />
+        {% else %}
+         <input
+          type="number"
+          name="{{ field.name }}"
+          id="{{ field.id_for_label }}"
+          value="{{ field.initial|replace  }}"
+          step="0.1"
+          lang="es"
+          readonly
+          class="form-control bg-dark text-white"
+        />
+        {% endif %}
+       
+
+        {% if field.errors %}
+        <div class="invalid-feedback">
+          {% for error in field.errors %} {{ error }} {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-outline-success mt-4">
+        <i class="fas fa-save"></i>
+        Guardar
+      </button>
+    </form>
+  </div>
+</div>
+
+{% endblock content %}

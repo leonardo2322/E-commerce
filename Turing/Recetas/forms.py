@@ -12,7 +12,7 @@ class Form_Ingrediente(forms.ModelForm):
 class Form_Receta(forms.ModelForm):
     class Meta:
         model = Receta
-        exclude = [ 'updated_at']
+        exclude = [ 'updated_at','costo_receta']
 
 class Form_Cantidades(forms.ModelForm):
     class Meta:

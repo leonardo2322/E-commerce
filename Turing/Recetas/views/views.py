@@ -1,11 +1,11 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.views import View
 from django.views.generic import CreateView,ListView
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import UpdateView
-from .models import Ingrediente
-from .forms import Form_Ingrediente
+from ..models import Ingrediente
+from ..forms import Form_Ingrediente
 
 class View_Crear_ingrediente(CreateView):
     model = Ingrediente
