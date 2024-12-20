@@ -54,8 +54,8 @@
       btn.addEventListener("click", function (event) {
         event.preventDefault();
 
-        const formTarget = event.target.closest('form')
-        console.log(formTarget)
+        const formTarget = event.target.closest("form");
+        console.log(formTarget);
         if (!formTarget) {
           console.error(`Formulario con selector ${formId} no encontrado.`);
           return;
@@ -71,7 +71,7 @@
           confirmButtonText: "¡Sí, eliminar!",
         }).then((result) => {
           if (result.isConfirmed) {
-             formTarget.submit();
+            formTarget.submit();
           }
         });
       });

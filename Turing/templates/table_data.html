@@ -1,0 +1,21 @@
+{% extends "base_to_admin.html" %}
+{% block content %}
+
+<div class="card card-default mt-5">
+    <div class="card-header">
+      <div class="card-title">{% block title %}
+        
+        {% endblock title %}
+    </div>
+    </div>
+  <table class="table table-striped" id="list-categorys">
+    <thead>{% block head %} {% endblock head %}</thead>
+    <tbody>{% block columns %} {% endblock columns %}</tbody>
+  </table>
+  <div class="card-footer">
+    {% block buttonmoreitems %}
+    
+    {% endblock buttonmoreitems %}
+  </div>
+</div>
+{% endblock content %}

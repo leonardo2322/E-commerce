@@ -1,1 +1,34 @@
 {% extends "base_to_admin.html" %}
+{% load custom_filters %}
+{% block content %}
+
+ <div class="card mt-3 text-white" style="background-color: rgb(2, 0, 26)">
+    <div class="card-header">Agregar Ingrediente</div>
+    
+      {% if form.errors %}
+      <div class="alert alert-danger alert-dismissible text-danger text-center"></div>
+      <ul style="list-style: none;">
+        <h5><i class="icon fas fa-ban" ></i> ha ocurrido un error al guardar los datos</h5>
+        <li ><strong class="text-danger">{{ form.errors }}</strong></li>
+      </ul>
+    </div>
+      {% endif %}
+    
+    <div class="card-body text-center d-flex justify-content-center" style="background-color: rgb(2, 0, 26)">
+      <form action="" class="form-group col-md-6" method="post" enctype="multipart/form-data">
+        {% csrf_token %} 
+        <input type="hidden" name="action" value="{{ action }}">
+        {% for field in form %}
+        
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ field.label  }}</label>
+          {{ field|add_class:'form-control bg-dark text-white' }}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-outline-success mt-4">
+            <i class="fas fa-save"></i>  Guardar
+        </button>
+      </form>
+    </div>
+  </div>
+{% endblock content %}

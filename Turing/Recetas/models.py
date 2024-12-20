@@ -3,11 +3,11 @@ from django.utils.timezone import now
 
 
 class Ingrediente(models.Model):
-    nombre_i = models.CharField(max_length=50)
-    cantid = models.DecimalField(max_digits=12, decimal_places=2)
-    precio = models.DecimalField(max_digits=12, decimal_places=2)
-    unidad_m = models.CharField(max_length=2, choices=[('kg', 'Kilogramos'), ('gr', 'Gramos')])
-    fecha_creado = models.DateTimeField(default=now)
+    nombre_i = models.CharField(verbose_name="Nombre ingrediente",max_length=50,unique=True)
+    cantid = models.DecimalField(verbose_name="Cantidad ingrediente",max_digits=12, decimal_places=2)
+    precio = models.DecimalField(verbose_name="Precio ingrediente",max_digits=12, decimal_places=2)
+    unidad_m = models.CharField(verbose_name="Unidad de medida ingrediente",max_length=2, choices=[('kg', 'Kilogramos'), ('gr', 'Gramos')])
+    fecha_creado = models.DateTimeField(verbose_name="Fecha creado ingrediente",default=now)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:

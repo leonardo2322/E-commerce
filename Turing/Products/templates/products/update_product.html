@@ -4,7 +4,6 @@
     <h2 class="text-center mb-4">Actualizar Producto</h2>
    <form method="post" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
-        <p>Valor de field.value para pvp: {{ form.initial.pvp }}</p>
         {% for field in form %}
                 <div class="mb-3">
                     <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>

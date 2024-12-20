@@ -1,0 +1,67 @@
+{% extends "base_to_admin.html" %} 
+{% load custom_filters %}
+
+{% block content %}
+
+<div class="card mt-3 text-white" style="background-color: rgb(2, 0, 26)">
+    <div class="card-header">Agregar Ingrediente</div>
+
+    
+    <div class="card-body text-center d-flex justify-content-center" style="background-color: rgb(2, 0, 26)">
+      <form action="" class="form-group col-md-6" method="post" enctype="multipart/form-data">
+        {% csrf_token %} 
+        <input type="hidden" name="action" value="{{ action }}">
+       {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {% if field.name == 'precio' %}
+
+                        <input type="number" 
+                            step="0.01" 
+                            name="{{ field.name }}" 
+                            id="{{ field.id_for_label }}" 
+                            value="{{ field.initial|replace }}" 
+                            step="0.1"
+                            lang="es"
+                            class="form-control  bg-dark text-white " />
+                    {% elif field.name == 'unidad_m' %}
+
+                        <select name="{{ field.name }}" id="{{ field.id_for_label }}" class="form-control bg-dark text-white">
+                                {% for value, label in field.field.choices %}
+                                    <option value="{{ value }}" 
+                                        {% if field.initial == value %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
+                        </select>
+                    {% else %}
+                        <!-- Otros campos -->
+                        <input type="{{ field.field.widget.input_type }}" 
+                            name="{{ field.name }}" 
+                            id="{{ field.id_for_label }}" 
+                            value="{{ field.initial|replace  }}" 
+                            step="0.1"
+                            lang="es"
+                            class="form-control bg-dark text-white " />
+                    {% endif %}
+
+                    {% if field.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in field.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        <button type="submit" class="btn btn-outline-success mt-4">
+            <i class="fas fa-save"></i>  Guardar
+        </button>
+      </form>
+    </div>
+  </div>
+
+{% endblock content %}

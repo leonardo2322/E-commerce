@@ -7,6 +7,8 @@ class Form_Ingrediente(forms.ModelForm):
         exclude = ['updated_at']
 
 
+        
+
 class Form_Receta(forms.ModelForm):
     class Meta:
         model = Receta
