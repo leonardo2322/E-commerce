@@ -1,0 +1,66 @@
+{% extends "base_to_admin.html" %}
+{% load custom_filters %}
+{% block content %}
+
+ <div class="card mt-3 text-white" style="background-color: rgb(2, 0, 26)">
+    <div class="card-header">Agregar Ingrediente</div>
+    
+      {% if form.errors %}
+      <div class="alert alert-danger alert-dismissible text-danger text-center"></div>
+      <ul style="list-style: none;">
+        <h5><i class="icon fas fa-ban" ></i> ha ocurrido un error al guardar los datos</h5>
+        <li ><strong class="text-danger">{{ form.errors }}</strong></li>
+      </ul>
+    </div>
+      {% endif %}
+    
+    <div class="card-body text-center d-flex justify-content-center" style="background-color: rgb(2, 0, 26)">
+         <div>
+        <ul>
+            {% for ingrediente_id, data in ingredientes_dict.items %}
+                <li>{{ data.ingrediente.nombre }} - {{ data.cantidad }} {{ data.ingrediente.unidad }}</li>
+            {% endfor %}
+        </ul>
+      </div>
+      <div class="form-group d-block" style="width: 100%;">
+          <label for="receta" class="form-label">Selecciona un receta:</label>
+          <select name="receta_id" class="form-select bg-dark text-white" id="receta_select" required>
+                {% for receta in recetas %}
+                    <option value="{{ receta.id }}">{{ receta.nombre_r }}</option>
+                {% endfor %}
+            </select>
+      </div>
+
+      <form action="" class="form-group d-block col-md-6" method="post" enctype="multipart/form-data">
+        {% csrf_token %} 
+        <input type="hidden" name="receta" id="receta_input" value="">
+        <div class="form-group">
+          <label for="ingrediente" class="form-label">Selecciona un ingrediente:</label>
+          <select name="ingrediente_id" class="form-select bg-dark text-white" required>
+                {% for ingrediente in ingredientes %}
+                    <option value="{{ ingrediente.id }}">{{ ingrediente.nombre_i }}</option>
+                {% endfor %}
+            </select>
+            <label for="cantidad " class="form-label text-white">Cantidad:</label>
+            <input type="number"class="form-control bg-dark text-white" step="0.01" name="cantidad" required>
+        </div>
+        <button type="submit" class="btn btn-outline-success mt-4">
+            <i class="fas fa-save"></i>  Agg ingrediente
+        </button>
+      </form>
+      
+     
+    </div>
+  </div>
+{% endblock content %}
+{% block scripts_admin %}
+<script>
+    const recetaSelect = document.getElementById('receta_select');
+    
+    const recetaInput = document.getElementById('receta_input');
+    
+    recetaSelect.addEventListener('change', function() {
+        recetaInput.value = recetaSelect.value;
+    });
+</script>
+{% endblock scripts_admin %}

@@ -220,6 +220,7 @@
           class="container-fluid col-12 col-md-10 ms-sm-auto px-4 flex-grow-1"
           style="height: 100vh; overflow-y: auto"
         >
+          {% block actions %}
           <div class="pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2 text-white">Recetas y Materia Prima</h1>
           </div>
@@ -246,8 +247,11 @@
             <a class="btn btn-secondary mb-3" href="{% url 'lista_receta' %}">
               Ver Receta
             </a>
+            <a class="btn btn-info mb-3" href="{% url 'crear_cant' %}">
+              Agg Cantidad
+            </a>
           </div>
-          {% block content %} {% endblock content %}
+          {% endblock actions %} {% block content %} {% endblock content %}
         </main>
       </div>
     </div>
