@@ -21,7 +21,12 @@ class Ingrediente(models.Model):
             models.Index(fields=['nombre_i']),
             models.Index(fields=['updated_at']),
         ]
-
+    @property
+    def price_in_gr(self):
+        if self.unidad_m == 'kg':
+            return (self.precio / self.cantid) / 1000
+        return self.precio / self.cantid
+    
     def __str__(self):
         return self.nombre_i
 
