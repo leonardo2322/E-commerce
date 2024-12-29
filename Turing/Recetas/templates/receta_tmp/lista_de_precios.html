@@ -50,17 +50,21 @@
   <div class="row justify-content-center">
     {% for item in lista_precios %}
     <div class="col-md-4 d-flex justify-content-center">
-      <div class="card">
+      <div class="card w-100">
         <div class="content">
           <div class="title">{{ item.nombre_r }}</div>
           <div class="price">costo receta: {{ item.costo_receta }}</div>
           <div class="description">
+            <ul class="list-unstyled">
             {% for i ,ingredientes in recetas_con_ingredientes.items %}
-                {% for receta  in ingredientes %}
+                {% for ing, value  in ingredientes.items %}
+                    {% if item.nombre_r == value.receta %}
+                        <li>{{ ing }} <span>Precio por gramo: {{ value.precio_por_gramo }} </span> <span> costo_total: {{value.costo_total}} </span></li>
+                    {% endif %}
 
-                    <li>{{ receta }}</li>
                 {% endfor %}
             {% endfor %}
+            </ul>
           </div>
         </div>
       </div>
