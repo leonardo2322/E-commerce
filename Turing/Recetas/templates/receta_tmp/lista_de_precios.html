@@ -56,15 +56,23 @@
           <div class="price">costo receta: {{ item.costo_receta }}</div>
           <div class="description">
             <ul class="list-unstyled">
+              <li><h4>Ingredientes:</h4></li>
             {% for i ,ingredientes in recetas_con_ingredientes.items %}
                 {% for ing, value  in ingredientes.items %}
                     {% if item.nombre_r == value.receta %}
-                        <li>{{ ing }} <span>Precio por gramo: {{ value.precio_por_gramo }} </span> <span> costo_total: {{value.costo_total}} </span></li>
+                        <li class="text-warning">{{ ing }}: <span class="text-white">Precio x gr: {{ value.precio_por_gramo|floatformat:5 }} </span> <span class="text-success"> costo_total: {{value.costo_total|floatformat:2}} </span> <span class="text-white">Cantidad: {{ value.cantidad }}</span></li>
                     {% endif %}
 
                 {% endfor %}
             {% endfor %}
+            
+
             </ul>
+            {% if item.nombre_r == item.nombre_r %}
+            <h5>Costo del paquete: {{ recetas_con_ingredientes.costo_paquete }} </h5>
+            <h5>unidades de la receta: {{ item.unidades_x_r }} und </h5>
+            <h5>Cantidad x paquete: {{ item.cant_x_paquete }} </h5>
+            {% endif %}
           </div>
         </div>
       </div>

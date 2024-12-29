@@ -128,6 +128,8 @@ class Lista_de_precios_view(ListView):
         context = super().get_context_data(**kwargs)
         lista = {}
         ingredientes_agregados = set()
+        costo_paquete = 0
+        
         for receta in self.get_queryset():
             ingredientes = Cantidades_ingrediente.objects.filter(
                 nombre_recete=receta
@@ -135,19 +137,21 @@ class Lista_de_precios_view(ListView):
             for ingrediente in ingredientes:
                 precio_por_gramo = ingrediente.nombre_ingrediente.price_in_gr
                 costo_total = precio_por_gramo * ingrediente.cantidad
+                costo_paquete = receta.costo_receta / receta.unidades_x_r * receta.cant_x_paquete + receta.empaque + receta.stiker
                 if ingrediente.nombre_ingrediente.nombre_i not in ingredientes_agregados:
                     ingredientes_agregados.add(ingrediente.nombre_ingrediente.nombre_i)
                     lista[ingrediente.nombre_ingrediente.nombre_i] = {
                         'receta': receta.nombre_r,
                         'precio_por_gramo': precio_por_gramo,
-                        'costo_total': costo_total
+                        'costo_total': costo_total,
+                        'cantidad': ingrediente.cantidad,
                     }
-                else:
-                    lista[ingrediente.nombre_ingrediente.nombre_i]['costo_total'] += costo_total
+                
                 
         print(lista,"------------------------")
         context['recetas_con_ingredientes'] = {
-            'recetas_con_ingredientes': lista
+            'recetas_con_ingredientes': lista,
+            'costo_paquete': costo_paquete
         }
 
         return context
