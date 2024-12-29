@@ -9,3 +9,10 @@ def add_class(value, arg):
 @register.filter(name='replace')
 def replace_comma(value):
     return str(value).replace(',', '.')
+
+@register.filter
+def divide(value, arg):
+    try:
+        return value / arg
+    except ZeroDivisionError:
+        return 0

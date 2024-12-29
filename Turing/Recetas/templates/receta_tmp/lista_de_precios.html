@@ -1,0 +1,73 @@
+{% extends "base_to_admin.html" %} {% block links %}
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 290px;
+    padding: 20px 1px;
+    margin: 10px 0;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 10px 15px -3px rgba(33, 150, 243, 0.4),
+      0 4px 6px -4px rgba(33, 150, 243, 0.4);
+    border-radius: 10px;
+    background-color: #6b6ecc;
+    background: linear-gradient(45deg, #04051dea 0%, #2b566e 100%);
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .content .price {
+    color: white;
+    font-weight: 800;
+    font-size: 45px;
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.42);
+  }
+
+  .content .description {
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  .content .title {
+    font-weight: 800;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.64);
+    margin-top: 10px;
+    font-size: 25px;
+    letter-spacing: 1px;
+  }
+</style>
+{% endblock %} {% block content %}
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    {% for item in lista_precios %}
+    <div class="col-md-4 d-flex justify-content-center">
+      <div class="card">
+        <div class="content">
+          <div class="title">{{ item.nombre_r }}</div>
+          <div class="price">costo receta: {{ item.costo_receta }}</div>
+          <div class="description">
+            {% for i ,ingredientes in recetas_con_ingredientes.items %}
+                {% for receta  in ingredientes %}
+
+                    <li>{{ receta }}</li>
+                {% endfor %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+{% endblock content %}

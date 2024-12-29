@@ -51,6 +51,7 @@
         text-align: center;
       }
     </style>
+    {% block links %} {% endblock %}
   </head>
   <body>
     <div class="container-fluid">
@@ -249,6 +250,9 @@
             </a>
             <a class="btn btn-info mb-3" href="{% url 'crear_cant' %}">
               Agg Cantidad
+            </a>
+            <a class="btn btn-secondary mb-3" href="{% url 'lista_precios' %}">
+              Lista de Precios
             </a>
           </div>
           {% endblock actions %} {% block content %} {% endblock content %}

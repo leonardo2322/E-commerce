@@ -1,4 +1,4 @@
-{% extends "table_data.html" %} {% block title %}
+{% extends "table_data.html" %} {% load custom_filters %} {% block title %}
 <h1 class="title text-dark">Recetas</h1>
 {% endblock title %} {% block head %}
 <tr>
@@ -11,6 +11,8 @@
   <th scope="col">Und x paquete</th>
   <th scope="col">empaque</th>
   <th scope="col">stiker</th>
+  <th scope="col">cantidad paquetes</th>
+
   <th scope="col">Costo receta</th>
 
   <th scope="col">Opciones</th>
@@ -26,6 +28,8 @@
   <td>{{ item.cant_x_paquete }}</td>
   <td>{{ item.stiker }}</td>
   <td>{{ item.empaque }}</td>
+  <td>{{ item.unidades_x_r|divide:item.cant_x_paquete }}</td>
+
   <td>{{ item.costo_receta }}$</td>
 
   <td>

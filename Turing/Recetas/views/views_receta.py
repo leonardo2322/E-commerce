@@ -1,3 +1,4 @@
+from collections import defaultdict
 from typing import Any
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
@@ -7,7 +8,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import UpdateView
 from django.forms.models import model_to_dict 
 from ..models import Receta, Cantidades_ingrediente ,Ingrediente
-from ..forms import Form_Receta, Form_Cantidades
+from ..forms import Form_Receta
 from Recetas.utils.funciones import decimal_to_float
 class Lista_recetas_view(ListView):
     model = Receta 
@@ -86,7 +87,7 @@ class Cantidades_para_recetas(View):
             for _, ingrediente in ingredientes_ids.items():
                 total_price += float(ingrediente[1].price_in_gr) * float(ingrediente[0])
             
-            receta.costo_receta = total_price
+            receta.costo_receta = total_price + receta.empaque + receta.stiker
             receta.save()
             request.session['ingredientes_dict'] = {}
             
@@ -113,4 +114,42 @@ class Cantidades_para_recetas(View):
         
         return redirect('crear_cant')
     
-        
+
+class Lista_de_precios_view(ListView):
+    model = Receta
+    template_name = 'receta_tmp/lista_de_precios.html'
+    context_object_name = 'lista_precios'
+
+    def get_queryset(self):
+        return Receta.objects.all()
+    
+
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        lista = defaultdict(list)
+        ingredientes_agregados = set()
+        for receta in self.get_queryset():
+            ingredientes = Cantidades_ingrediente.objects.filter(
+                nombre_recete=receta
+            ).select_related('nombre_ingrediente')
+            for ingrediente in ingredientes:
+                precio_por_gramo = ingrediente.nombre_ingrediente.price_in_gr
+                costo_total = precio_por_gramo * ingrediente.cantidad
+                if ingrediente.nombre_ingrediente.nombre_i not in ingredientes_agregados:
+                    lista[receta.nombre_r].append({
+                        'nombre': ingrediente.nombre_ingrediente.nombre_i,
+                        'cantidad': ingrediente.cantidad,
+                        'precio_por_gramo': precio_por_gramo,
+                        'costo_total': costo_total,
+                    })
+        print(lista)
+        context['recetas_con_ingredientes'] = {
+            'recetas_con_ingredientes': lista
+        }
+
+        return context
+
+
+    
+
+
