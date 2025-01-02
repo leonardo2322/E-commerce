@@ -1,4 +1,5 @@
 from collections import defaultdict
+from decimal import Decimal
 from typing import Any
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
@@ -128,30 +129,35 @@ class Lista_de_precios_view(ListView):
         context = super().get_context_data(**kwargs)
         lista = {}
         ingredientes_agregados = set()
-        costo_paquete = 0
+        costo_paquetes = defaultdict(Decimal)
         
         for receta in self.get_queryset():
             ingredientes = Cantidades_ingrediente.objects.filter(
                 nombre_recete=receta
             ).select_related('nombre_ingrediente')
+            
             for ingrediente in ingredientes:
                 precio_por_gramo = ingrediente.nombre_ingrediente.price_in_gr
                 costo_total = precio_por_gramo * ingrediente.cantidad
-                costo_paquete = receta.costo_receta / receta.unidades_x_r * receta.cant_x_paquete + receta.empaque + receta.stiker
+              
                 if ingrediente.nombre_ingrediente.nombre_i not in ingredientes_agregados:
                     ingredientes_agregados.add(ingrediente.nombre_ingrediente.nombre_i)
+
                     lista[ingrediente.nombre_ingrediente.nombre_i] = {
                         'receta': receta.nombre_r,
                         'precio_por_gramo': precio_por_gramo,
                         'costo_total': costo_total,
                         'cantidad': ingrediente.cantidad,
                     }
+            costo_paquete = receta.costo_receta / receta.unidades_x_r * receta.cant_x_paquete 
+            if costo_paquete > 0:
+                costo_paquete += receta.empaque + receta.stiker
+            costo_paquetes[receta.nombre_r] += costo_paquete
+       
                 
-                
-        print(lista,"------------------------")
         context['recetas_con_ingredientes'] = {
             'recetas_con_ingredientes': lista,
-            'costo_paquete': costo_paquete
+            'costo_paquetes': {'costos':dict(costo_paquetes)}
         }
 
         return context
